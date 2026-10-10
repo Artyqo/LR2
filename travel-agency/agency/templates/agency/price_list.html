@@ -1,0 +1,68 @@
+{% extends 'agency/base.html' %}
+{% block title %}Прайс-лист — Глобус Тревел{% endblock %}
+{% block meta_description %}Прайс-лист турагентства «Глобус Тревел»: стоимость путёвок по странам и отелям на 1, 2 и 4 недели.{% endblock %}
+{% block content %}
+<h1>Прайс-лист</h1>
+<p>Стоимость путёвок рассчитана по цене суток проживания в отеле. Данные на
+    <time datetime="{{ updated|date:'Y-m-d' }}">{{ updated|date:"d/m/Y" }}</time>.</p>
+
+<div style="overflow-x: auto;">
+<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+    <caption style="caption-side: top; text-align: left; font-weight: bold; padding-bottom: 8px;">Стоимость путёвок по отелям, BYN</caption>
+    <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col span="3">
+    </colgroup>
+    <thead>
+        <tr>
+            <th id="h-country" rowspan="2" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">Страна</th>
+            <th id="h-hotel" rowspan="2" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">Отель</th>
+            <th id="h-stars" rowspan="2" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">Звёзды</th>
+            <th id="h-day" rowspan="2" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">Цена в сутки</th>
+            <th id="h-total" colspan="3" scope="colgroup" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">Стоимость путёвки</th>
+        </tr>
+        <tr>
+            <th id="h-w1" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">1 неделя</th>
+            <th id="h-w2" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">2 недели</th>
+            <th id="h-w4" scope="col" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center;">4 недели</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        {% for item in row.hotels %}
+        <tr>
+            {% if forloop.first %}
+            <th id="country-{{ row.country.pk }}" rowspan="{{ row.span }}" scope="rowgroup" headers="h-country" style="border: 1px solid #ddd; padding: 8px 10px; background: #fafafa; text-align: left;">{{ row.country.name }}</th>
+            {% endif %}
+            <th id="hotel-{{ item.hotel.pk }}" scope="row" headers="country-{{ row.country.pk }} h-hotel" style="border: 1px solid #ddd; padding: 8px 10px; font-weight: normal; text-align: left;">{{ item.hotel.name }}</th>
+            <td headers="country-{{ row.country.pk }} hotel-{{ item.hotel.pk }} h-stars" style="border: 1px solid #ddd; padding: 8px 10px; text-align: center;">{{ item.hotel.stars }} ★</td>
+            <td headers="country-{{ row.country.pk }} hotel-{{ item.hotel.pk }} h-day" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ item.hotel.price_per_day }}</td>
+            <td headers="country-{{ row.country.pk }} hotel-{{ item.hotel.pk }} h-total h-w1" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ item.week1 }}</td>
+            <td headers="country-{{ row.country.pk }} hotel-{{ item.hotel.pk }} h-total h-w2" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ item.week2 }}</td>
+            <td headers="country-{{ row.country.pk }} hotel-{{ item.hotel.pk }} h-total h-w4" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ item.week4 }}</td>
+        </tr>
+        {% endfor %}
+        {% empty %}
+        <tr>
+            <td colspan="7" style="border: 1px solid #ddd; padding: 8px 10px; text-align: center;">Отели пока не добавлены.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    {% if rows %}
+    <tfoot>
+        <tr>
+            <th id="f-count" colspan="3" scope="row" style="border: 1px solid #ddd; padding: 8px 10px; background: #f3f6fa; text-align: center; text-align: left;">Всего отелей / средняя цена в сутки</th>
+            <td headers="f-count h-hotel" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ hotels_count }}</td>
+            <td headers="f-count h-day" colspan="3" style="border: 1px solid #ddd; padding: 8px 10px; text-align: right;">{{ average_price }}</td>
+        </tr>
+    </tfoot>
+    {% endif %}
+</table>
+</div>
+
+<p style="margin-top: 20px;"><small>Цены указаны в белорусских рублях (<abbr title="Белорусский рубль">BYN</abbr>) за путёвку на одного человека.</small></p>
+<p><a href="{% url 'tour_list' %}">Перейти в каталог путёвок →</a></p>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'agency/base.html' %}
+
+{% block title %}Регистрация — Глобус Тревел{% endblock %}
+
+{% block content %}
+<div style="max-width: 480px; margin: 0 auto;">
+    <h1>Регистрация клиента</h1>
+
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div style="margin-bottom: 16px;">
+            <label for="{{ field.id_for_label }}" style="display: block; font-size: 14px; color: #444; margin-bottom: 5px; font-weight: 500;">
+                {{ field.label }}
+                {% if field.field.required %}
+                <span style="color: #dc3545;">*</span>
+                {% endif %}
+            </label>
+
+            <div{% if field.errors %} style="border: 1px solid #dc3545; border-radius: 4px;"{% endif %}>
+                {{ field }}
+            </div>
+
+            {% if field.help_text %}
+            <p style="font-size: 12px; color: #888; margin: 4px 0 0 0;">
+                {{ field.help_text }}
+            </p>
+            {% endif %}
+
+            {% for error in field.errors %}
+            <p style="font-size: 13px; color: #dc3545; margin: 5px 0 0 0; font-weight: 500;">
+                ⚠ {{ error }}
+            </p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+        <div style="background: #fff5f5; border: 1px solid #dc3545; border-radius: 4px; padding: 12px 16px; margin-bottom: 16px;">
+            {% for error in form.non_field_errors %}
+            <p style="margin: 0; color: #dc3545; font-size: 14px;">⚠ {{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" style="display: inline-block; background: #111; color: #fff; padding: 10px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: 100%; box-sizing: border-box;">
+            Создать аккаунт
+        </button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Телефон: маска +375 (29) XXX-XX-XX
+            var phoneInput = document.querySelector('input[name="phone"]');
+            if (phoneInput) {
+                phoneInput.setAttribute('pattern', '\\+375 \\((25|29|33|44)\\) \\d{3}-\\d{2}-\\d{2}');
+                phoneInput.setAttribute('title', 'Формат: +375 (29) XXX-XX-XX. Коды: 25, 29, 33, 44');
+            }
+
+            // Дата рождения: не моложе 18 лет
+            var birthInput = document.querySelector('input[name="birth_date"]');
+            if (birthInput) {
+                var today = new Date();
+                var maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                var yyyy = maxDate.getFullYear();
+                var mm = String(maxDate.getMonth() + 1).padStart(2, '0');
+                var dd = String(maxDate.getDate()).padStart(2, '0');
+                birthInput.setAttribute('max', yyyy + '-' + mm + '-' + dd);
+                birthInput.setAttribute('title', 'Вам должно быть не менее 18 лет');
+            }
+        });
+    </script>
+
+    <p style="margin-top: 20px; font-size: 14px; text-align: center; color: #111;">
+        Уже есть аккаунт? <a href="{% url 'login' %}" style="color: #111;">Войти</a>
+    </p>
+</div>
+{% endblock %}

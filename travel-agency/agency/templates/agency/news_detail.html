@@ -1,0 +1,52 @@
+{% extends 'agency/base.html' %}
+{% load dt_extras %}
+
+{% block title %}{{ article.title }} — Новости — Глобус Тревел{% endblock %}
+{% block meta_description %}{{ article.short_description }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.short_description }}{% endblock %}
+
+{% block content %}
+<nav aria-label="Хлебные крошки" style="font-size: 14px; margin-bottom: 16px;">
+    <a href="{% url 'index' %}">Главная</a> ›
+    <a href="{% url 'news_list' %}">Новости</a> ›
+    <span aria-current="page">{{ article.title }}</span>
+</nav>
+
+<article itemscope itemtype="https://schema.org/NewsArticle">
+    <header>
+        <h1 itemprop="headline">{{ article.title }}</h1>
+        <p style="font-size: 13px; color: #666;">
+            Опубликовано: <time itemprop="datePublished" datetime="{{ article.published_date|date:'c' }}">{% dt_dual article.published_date %}</time><br>
+            Изменено: <time itemprop="dateModified" datetime="{{ article.updated_at|date:'c' }}">{% dt_dual article.updated_at %}</time>
+        </p>
+        <p itemprop="description" style="font-style: italic; font-size: 18px;">{{ article.short_description }}</p>
+    </header>
+
+    {% if article.image %}
+    <figure style="margin: 0 0 20px 0;">
+        <img src="{{ article.image.url }}" alt="{{ article.title }}" itemprop="image" width="800" height="450"
+            style="max-width: 100%; height: auto; border-radius: 6px;">
+        <figcaption style="font-size: 13px; color: #666;">{{ article.title }}</figcaption>
+    </figure>
+    {% endif %}
+
+    <div itemprop="articleBody">
+        {{ article.content|linebreaks }}
+    </div>
+</article>
+
+<p><a href="{% url 'news_list' %}" style="display: inline-block; background: #eee; color: #111; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px;">← Все новости</a></p>
+
+{% if others %}
+<aside aria-labelledby="other-news-title" style="margin-top: 40px;">
+    <h2 id="other-news-title">Другие новости</h2>
+    <ul>
+        {% for other in others %}
+        <li><a href="{% url 'news_detail' other.pk %}">{{ other.title }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
+{% endif %}
+{% endblock %}

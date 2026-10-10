@@ -1,0 +1,17 @@
+services:
+  web:
+    image: artqo/travel-agency:latest
+    build: .
+    container_name: travel_agency_web
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - media_data:/app/media
+      - static_data:/app/staticfiles
+
+volumes:
+  media_data:
+  static_data:

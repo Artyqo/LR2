@@ -1,0 +1,68 @@
+{% extends 'agency/base.html' %}
+
+{% block title %}Корзина — Глобус Тревел{% endblock %}
+{% block meta_robots %}noindex, nofollow{% endblock %}
+
+{% block content %}
+<h1>Корзина заказа</h1>
+
+{% if items %}
+<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+    <caption style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;">Путёвки в корзине</caption>
+    <thead>
+        <tr>
+            <th scope="col" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Путёвка</th>
+            <th scope="col" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Цена</th>
+            <th scope="col" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Количество</th>
+            <th scope="col" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Сумма</th>
+            <th scope="col" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <th scope="row" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9; font-weight: normal;">
+                <a href="{% url 'tour_detail' item.tour.id %}">{{ item.tour.title }}</a><br>
+                <small>{{ item.tour.hotel.name }}, {{ item.tour.hotel.country.name }}</small>
+            </th>
+            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ item.tour.price }} BYN</td>
+            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <form method="post" action="{% url 'cart_update' item.id 'dec' %}" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" aria-label="Уменьшить количество"{% if item.quantity <= 1 %} disabled{% endif %} style="display: inline-block; background: #eee; color: #111; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">−</button>
+                    </form>
+                    <output aria-label="Количество">{{ item.quantity }}</output>
+                    <form method="post" action="{% url 'cart_update' item.id 'inc' %}" style="margin: 0;">
+                        {% csrf_token %}
+                        <button type="submit" aria-label="Увеличить количество"{% if item.quantity >= max_qty %} disabled{% endif %} style="display: inline-block; background: #eee; color: #111; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">+</button>
+                    </form>
+                </div>
+            </td>
+            <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ item.subtotal }} BYN</strong></td>
+            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+                <form method="post" action="{% url 'cart_update' item.id 'remove' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" style="display: inline-block; background: #c82333; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">Удалить из корзины</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th scope="row" colspan="3" style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9; font-weight: normal;">Итого</th>
+            <td colspan="2" style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ total }} BYN</strong></td>
+        </tr>
+    </tfoot>
+</table>
+
+<p style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+    <a href="{% url 'tour_list' %}" style="display: inline-block; background: #eee; color: #111; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">← Продолжить выбор</a>
+    <a href="{% url 'checkout' %}" style="display: inline-block; background: #28a745; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">Оплатить</a>
+</p>
+{% else %}
+<p>Ваша корзина пуста.</p>
+<p><a href="{% url 'tour_list' %}" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">Перейти в каталог</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'agency/base.html' %}
+{% load dt_extras %}
+{% block title %}Словарь терминов / FAQ — Глобус Тревел{% endblock %}
+{% block meta_description %}Словарь терминов и понятий туриста: ответы на частые вопросы о путёвках, визах и оплате.{% endblock %}
+{% block content %}
+<h1>Словарь терминов и понятий</h1>
+<p>Нажмите на вопрос или термин, чтобы открыть развёрнутый ответ.</p>
+{% for faq in faqs %}
+<details style="border: 1px solid #eee; padding: 14px 20px; margin-bottom: 12px; border-radius: 4px;">
+    <summary style="cursor: pointer; font-weight: bold; font-size: 17px;">{{ faq.question }}</summary>
+    <p style="margin: 12px 0;">{{ faq.answer }}</p>
+    <p style="font-size: 12px; color: #666; margin: 0;">Добавлено: <time datetime="{{ faq.date_added|date:'Y-m-d' }}">{{ faq.date_added|date:"d/m/Y" }}</time>
+        ({% dt_dual faq.created_at %})<br>Изменено: {% dt_dual faq.updated_at %}</p>
+</details>
+{% empty %}
+<p>Словарь пока пуст.</p>
+{% endfor %}
+{% endblock %}

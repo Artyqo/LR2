@@ -1,0 +1,128 @@
+{% load static %}<!DOCTYPE html>
+<html lang="ru" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %}Глобус Тревел — турагентство{% endblock %}</title>
+
+    <meta name="description" content="{% block meta_description %}Глобус Тревел — туристическое агентство: подбор путёвок, отели по всему миру, актуальные цены и горящие туры.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}турагентство, путёвки, горящие туры, отели, отдых за границей, Беларусь{% endblock %}">
+    <meta name="author" content="Глобус Тревел">
+    <meta name="generator" content="Django">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    <meta name="theme-color" content="#0d3b6e">
+    <link rel="canonical" href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+
+    <meta property="og:site_name" content="Глобус Тревел">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:title" content="{% block og_title %}Глобус Тревел — турагентство{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Подбор путёвок и отелей по всему миру.{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'agency/img/icon-512.png' %}">
+
+    <link rel="icon" href="{% static 'agency/img/favicon.svg' %}" type="image/svg+xml">
+    <link rel="icon" href="{% static 'agency/favicon.ico' %}" sizes="any">
+    <link rel="apple-touch-icon" href="{% static 'agency/img/apple-touch-icon.png' %}">
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #fff; color: #111; display: flex; flex-direction: column; min-height: 100vh;">
+    <a href="#main" accesskey="s"
+        style="position: absolute; left: -9999px; top: 0; background: #111; color: #fff; padding: 8px 14px;"
+        onfocus="this.style.left='0'" onblur="this.style.left='-9999px'">Перейти к содержимому</a>
+
+    <header style="border-bottom: 1px solid #eee; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <a href="{% url 'index' %}" title="Глобус Тревел — на главную" style="display: inline-flex; align-items: center; margin-right: 20px;">
+                <img src="{% static 'agency/img/logo.svg' %}" alt="Глобус Тревел" width="167" height="40" style="display: block; height: 40px; width: auto;">
+            </a>
+
+            <nav aria-label="Основное меню">
+                <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: center; font-size: 15px;">
+                    <li><a href="{% url 'tour_list' %}" style="color: #111; text-decoration: none;"><strong>Каталог туров</strong></a></li>
+                    <li><a href="{% url 'price_list' %}" style="color: #111; text-decoration: none;">Прайс-лист</a></li>
+                    <li><a href="{% url 'about' %}" style="color: #111; text-decoration: none;">О компании</a></li>
+                    <li><a href="{% url 'news_list' %}" style="color: #111; text-decoration: none;">Новости</a></li>
+                    <li><a href="{% url 'faq' %}" style="color: #111; text-decoration: none;">Словарь / FAQ</a></li>
+                    <li><a href="{% url 'contacts' %}" style="color: #111; text-decoration: none;">Контакты</a></li>
+                    <li><a href="{% url 'vacancies' %}" style="color: #111; text-decoration: none;">Вакансии</a></li>
+                    <li><a href="{% url 'promocodes' %}" style="color: #111; text-decoration: none;">Промокоды</a></li>
+                    <li><a href="{% url 'reviews' %}" style="color: #111; text-decoration: none;">Отзывы</a></li>
+                    <li><a href="{% url 'guide' %}" style="color: #111; text-decoration: none;">Справка</a></li>
+                    <li><a href="{% url 'inquiry' %}" style="color: #111; text-decoration: none;">Заявка на подбор</a></li>
+                    {% if user.is_superuser %}
+                    <li><a href="{% url 'statistics' %}" style="color: #111; text-decoration: none;">Статистика</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px; font-size: 14px;">
+            {% if user.is_authenticated %}
+            {% if user.client_profile %}<a href="{% url 'cart' %}" style="color: #111; text-decoration: none;">🛒 Корзина</a>{% endif %}
+            <a href="{% url 'profile' %}" style="color: #0000ee; font-weight: bold; text-decoration: none;">Личный кабинет</a>
+            <span>Привет, {{ user.username }}!</span>
+            <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
+                {% csrf_token %}
+                <button type="submit" style="background: none; border: none; color: #666; cursor: pointer; text-decoration: underline; font-size: 14px; padding: 0;">Выйти</button>
+            </form>
+            {% else %}
+            <a href="{% url 'login' %}" style="color: #111; text-decoration: none;">Войти</a>
+            <a href="{% url 'register' %}" style="color: #111; text-decoration: none;">Регистрация</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main id="main" style="max-width: 960px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1 0 auto;">
+        {% if messages %}
+        <div role="status">
+            {% for message in messages %}
+            <div style="padding: 12px 16px; margin-bottom: 10px; background: #fafafa; border: 1px solid #eee; border-radius: 4px;">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="margin-top: 60px; padding: 24px 20px; border-top: 1px solid #eee; font-size: 13px; color: #666; background: #f9f9f9;">
+        <div style="max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px;">
+            <section itemscope itemtype="https://schema.org/TravelAgency">
+                <h2 itemprop="name" style="font-size: 15px; margin: 0 0 8px 0; color: #111;">Глобус Тревел</h2>
+                <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}/">
+                <meta itemprop="logo" content="{{ request.scheme }}://{{ request.get_host }}{% static 'agency/img/icon-512.png' %}">
+                <address style="font-style: normal; line-height: 1.8;">
+                    <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+                        <span itemprop="postalCode">220030</span>,
+                        <span itemprop="addressLocality">г. Минск</span>,
+                        <span itemprop="streetAddress">пр-т Независимости, 1</span>
+                    </span><br>
+                    Тел.: <a href="tel:+375291112233" itemprop="telephone" style="color: #666;">+375 (29) 111-22-33</a><br>
+                    Email: <a href="mailto:info@globustravel.by" itemprop="email" style="color: #666;">info@globustravel.by</a><br>
+                    <meta itemprop="openingHours" content="Mo-Fr 09:00-18:00">
+                    Пн–Пт: <time datetime="09:00">09:00</time>–<time datetime="18:00">18:00</time>
+                </address>
+            </section>
+
+            <nav aria-label="Карта сайта">
+                <h2 style="font-size: 15px; margin: 0 0 8px 0; color: #111;">Разделы сайта</h2>
+                <ul style="list-style: none; margin: 0; padding: 0;">
+                    <li style="margin-bottom: 4px;"><a href="{% url 'index' %}" style="color: #666;">Главная</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'tour_list' %}" style="color: #666;">Каталог туров</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'price_list' %}" style="color: #666;">Прайс-лист</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'news_list' %}" style="color: #666;">Новости</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'promocodes' %}" style="color: #666;">Промокоды и купоны</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'guide' %}" style="color: #666;">Справка для туриста</a></li>
+                    <li style="margin-bottom: 4px;"><a href="{% url 'privacy_policy' %}" style="color: #666;">Политика конфиденциальности</a></li>
+                </ul>
+            </nav>
+        </div>
+        <p style="text-align: center; margin: 20px 0 0 0;"><small>&copy; 2026 Турагентство «Глобус Тревел». Все права защищены.</small></p>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+[run]
+source = agency,travel_agency
+omit =
+    */migrations/*
+    */tests.py
+    manage.py
+    travel_agency/wsgi.py
+    travel_agency/asgi.py
+
+[report]
+show_missing = True

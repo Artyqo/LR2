@@ -1,0 +1,16 @@
+{% extends 'agency/base.html' %}
+{% block title %}Вакансии — Глобус Тревел{% endblock %}
+{% block meta_description %}Открытые вакансии турагентства «Глобус Тревел»: описание, условия и заработная плата.{% endblock %}
+{% block content %}
+<h1>Вакансии компании</h1>
+{% for v in vacancies %}
+<article style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 style="margin-top: 0; font-size: 20px;">{{ v.title }}</h2>
+    <p>{{ v.description }}</p>
+    <p style="margin-bottom: 0;">Заработная плата: <strong>{{ v.salary|default:"по договорённости" }}</strong></p>
+</article>
+{% empty %}
+<p>Активных вакансий на данный момент нет.</p>
+{% endfor %}
+<p>Резюме отправляйте на <a href="mailto:hr@globustravel.by?subject=Резюме">hr@globustravel.by</a>.</p>
+{% endblock %}

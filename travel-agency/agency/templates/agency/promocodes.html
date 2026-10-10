@@ -1,0 +1,31 @@
+{% extends 'agency/base.html' %}
+{% block title %}Промокоды и купоны — Глобус Тревел{% endblock %}
+{% block meta_description %}Действующие промокоды и архив купонов турагентства «Глобус Тревел».{% endblock %}
+{% block content %}
+<h1>Промокоды и купоны</h1>
+<p>Введите промокод на странице оплаты, чтобы получить скидку на заказ.</p>
+
+<section aria-labelledby="promo-active-title">
+    <h2 id="promo-active-title">Действующие промокоды</h2>
+    {% for p in active_promos %}
+    <div style="border: 1px solid #eee; border-left: 4px solid #111; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+        <h3 style="margin-top: 0;">Код: <code>{{ p.code }}</code></h3>
+        <p style="margin-bottom: 0;">Скидка: <strong>{{ p.discount_amount }}%</strong></p>
+    </div>
+    {% empty %}
+    <p>Нет действующих акций.</p>
+    {% endfor %}
+</section>
+
+<section aria-labelledby="promo-archive-title" style="margin-top: 40px;">
+    <h2 id="promo-archive-title" style="color: #666;">Архив купонов</h2>
+    {% for p in archive_promos %}
+    <div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px; opacity: 0.6;">
+        <h3 style="margin-top: 0;">Код: <del>{{ p.code }}</del></h3>
+        <p style="margin-bottom: 0;">Скидка составляла: {{ p.discount_amount }}%</p>
+    </div>
+    {% empty %}
+    <p>Архив пуст.</p>
+    {% endfor %}
+</section>
+{% endblock %}

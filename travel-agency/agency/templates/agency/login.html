@@ -1,0 +1,17 @@
+{% extends 'agency/base.html' %}
+
+{% block title %}Вход — Глобус Тревел{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto;">
+    <h1>Вход в систему</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">Войти</button>
+    </form>
+    <p style="margin-top: 20px; font-size: 14px;">
+        Ещё нет аккаунта? <a href="{% url 'register' %}" style="color: #111;">Зарегистрироваться</a>
+    </p>
+</div>
+{% endblock %}

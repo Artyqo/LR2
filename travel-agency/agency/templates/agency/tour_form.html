@@ -1,0 +1,27 @@
+{% extends 'agency/base.html' %}
+
+{% block title %}{{ action }} путевку — Глобус Тревел{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto;">
+    <h1>{{ action }} путевку</h1>
+    <form method="post" style="margin-top: 20px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="margin-top: 20px;">
+            <button type="submit" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">{{ action }}</button>
+            <a href="{% url 'tour_list' %}" style="margin-left: 15px; color: #666; text-decoration: none;">Отмена</a>
+        </div>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var dateInput = document.querySelector('input[name="departure_date"]');
+            if (dateInput) {
+                var today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+                dateInput.setAttribute('title', 'Дата вылета не может быть в прошлом');
+            }
+        });
+    </script>
+</div>
+{% endblock %}

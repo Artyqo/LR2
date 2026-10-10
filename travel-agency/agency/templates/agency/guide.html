@@ -1,0 +1,200 @@
+{% extends 'agency/base.html' %}
+{% load static %}
+{% block title %}Справка для туриста — Глобус Тревел{% endblock %}
+{% block meta_description %}Справка для туриста: как купить путёвку, термины, полезные ссылки, памятка для скачивания, аудио и видео.{% endblock %}
+{% block meta_keywords %}справка туриста, памятка, как купить путёвку, трансфер, страховка{% endblock %}
+
+{% block content %}
+<header id="top">
+    <h1>Справка для туриста</h1>
+    <p>Страница собрана из <em>семантических</em> элементов HTML5: заголовков, секций, списков, цитат, таблиц, форм и мультимедиа.</p>
+</header>
+
+<noscript><p style="background: #fff3cd; padding: 10px;">В вашем браузере отключён JavaScript — часть возможностей сайта может быть недоступна.</p></noscript>
+
+<nav aria-label="Оглавление справки" style="margin-bottom: 30px;">
+    <h2 style="font-size: 18px;">Оглавление</h2>
+    <ol>
+        <li><a href="#how-to-buy">Как купить путёвку</a></li>
+        <li><a href="#terms">Термины и сокращения</a></li>
+        <li><a href="#quotes">Цитаты и отзывы</a></li>
+        <li><a href="#listing">Пример листинга</a></li>
+        <li><a href="#poem">Стихотворение в дорогу</a></li>
+        <li><a href="#links">Ссылки и документы</a></li>
+        <li><a href="#images">Адаптивные изображения</a></li>
+        <li><a href="#media">Аудио и видео</a></li>
+        <li><a href="#global">Глобальные атрибуты</a></li>
+    </ol>
+</nav>
+
+
+{# ================= 1. Как купить путёвку ================= #}
+<section id="how-to-buy" aria-labelledby="how-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="how-title" style="margin-top: 0;">1. Как купить путёвку</h2>
+    <ol>
+        <li>Выберите направление в <a href="{% url 'tour_list' %}">каталоге</a> или оставьте <a href="{% url 'inquiry' %}">заявку на подбор</a>.</li>
+        <li><strong>Зарегистрируйтесь</strong> как клиент — вам должно быть <mark>не менее 18 лет</mark>.</li>
+        <li>Нажмите «Добавить в корзину» и проверьте количество путёвок.</li>
+        <li>Оплатите заказ; при наличии введите <a href="{% url 'promocodes' %}">промокод</a>.</li>
+    </ol>
+    <p>Цена путёвки = стоимость суток в отеле × число дней. Старая цена <del>1500 BYN</del>, новая цена <ins>1200 BYN</ins>.
+        Площадь номера — 25&nbsp;м<sup>2</sup>, температура воды +26&nbsp;°C.
+        Формула воды: H<sub>2</sub>O. Клавиша для быстрого перехода к содержимому: <kbd>Alt</kbd> + <kbd>S</kbd>.</p>
+    <p>Итоговый заказ имеет вид: <samp>Заказ №15 оплачен на сумму 1200.00 BYN</samp>.
+        Число недель обозначим переменной <var>n</var>, тогда длительность поездки равна <var>n</var> × 7 дней.</p>
+    <p><small>Условия акций могут изменяться. Актуальная информация — на этой странице на <time datetime="{{ today|date:'Y-m-d' }}">{{ today|date:"d/m/Y" }}</time>.</small></p>
+
+    <h3>Что входит в стоимость</h3>
+    <ul>
+        <li>проживание в выбранном отеле;</li>
+        <li>консультация менеджера;
+            <ul>
+                <li>помощь с оформлением документов;</li>
+                <li>подбор трансфера;</li>
+            </ul>
+        </li>
+        <li>сопровождение заказа до вылета.</li>
+    </ul>
+
+    <h3>Типы питания</h3>
+    <dl>
+        <dt>RO</dt><dd>без питания;</dd>
+        <dt>BB</dt><dd>только завтраки;</dd>
+        <dt>HB</dt><dd>завтраки и ужины (полупансион);</dd>
+        <dt>AI</dt><dd>всё включено.</dd>
+    </dl>
+</section>
+
+{# ================= 2. Термины и сокращения ================= #}
+<section id="terms" aria-labelledby="terms-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="terms-title" style="margin-top: 0;">2. Термины и сокращения</h2>
+    <p><dfn>Трансфер</dfn> — организованная доставка туриста из аэропорта в отель и обратно.</p>
+    <p><dfn id="term-voucher">Ваучер</dfn> — документ, подтверждающий оплату услуг и дающий право на размещение в отеле.</p>
+    <p>Стоимость указана в <abbr title="Белорусские рубли">BYN</abbr>, курсы валют берутся с сайта
+        <abbr title="Национальный банк Республики Беларусь">НБРБ</abbr>. Реквизиты содержат
+        <abbr title="Учётный номер плательщика">УНП</abbr>. Отели по системе
+        <abbr title="All Inclusive">AI</abbr> включают питание и напитки.</p>
+    <p>Название сервиса погоды — <span translate="no">OpenWeatherMap</span>; по-английски «visa» —
+        <i lang="en">entry permit</i>. Логин пользователя может быть на любом языке: <bdi>Ольга_92</bdi>.</p>
+    <p>Тарифы обновляются каждые <data value="7">7 дней</data>.</p>
+</section>
+
+{# ================= 3. Цитаты ================= #}
+<section id="quotes" aria-labelledby="quotes-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="quotes-title" style="margin-top: 0;">3. Цитаты и отзывы</h2>
+    <blockquote cite="{% url 'about' %}" style="margin: 0 0 16px 0; padding: 8px 16px; border-left: 4px solid #ccc; background: #fafafa;">
+        <p style="margin: 0;">Мы подберём для вас лучший отдых: полная база отелей, актуальные цены и подробное описание климата для каждого сезона.</p>
+        <footer>— <cite>Глобус Тревел</cite>, страница «<a href="{% url 'about' %}">О компании</a>»</footer>
+    </blockquote>
+    <p>Клиенты говорят: <q cite="{% url 'reviews' %}">Менеджер подобрал отель за один день</q> — подробнее в разделе
+        <cite>«<a href="{% url 'reviews' %}">Отзывы</a>»</cite>.</p>
+</section>
+
+{# ================= 4. Листинг ================= #}
+<section id="listing" aria-labelledby="listing-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="listing-title" style="margin-top: 0;">4. Пример листинга: расчёт стоимости</h2>
+    <p>Так на сайте считается цена путёвки (модель <code>Tour</code>):</p>
+    <figure style="margin: 0;">
+        <pre style="background: #f5f5f5; padding: 14px; overflow-x: auto; border-radius: 4px; margin: 0;"><code>@property
+def price(self):
+    days = self.duration_weeks * 7
+    return self.hotel.price_per_day * days</code></pre>
+        <figcaption style="font-size: 13px; color: #666;">Листинг 1. Свойство <code>price</code> на языке Python.</figcaption>
+    </figure>
+</section>
+
+{# ================= 5. Стихотворение ================= #}
+<section id="poem" aria-labelledby="poem-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="poem-title" style="margin-top: 0;">5. Стихотворение в дорогу</h2>
+    <p>Четверостишие с фиксированным переводом строки (<code>&lt;br&gt;</code>):</p>
+    <p style="font-style: italic;">
+        Чемодан собран, билеты в руке,<br>
+        Море шумит на далёком песке.<br>
+        Пусть за окном непогода и снег —<br>
+        Скоро в дорогу, в тёплый рассвет.
+    </p>
+    <p>А здесь возможный перенос слова (<code>&lt;wbr&gt;</code>) в длинном термине: достопримечатель<wbr>ность,
+        путешествен<wbr>никам, https://www.globus<wbr>travel.by/tours/<wbr>hot/<wbr>summer.</p>
+</section>
+
+{# ================= 6. Ссылки ================= #}
+<section id="links" aria-labelledby="links-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="links-title" style="margin-top: 0;">6. Ссылки и документы</h2>
+    <ul>
+        <li>Внутренняя страница: <a href="{% url 'tour_list' %}" title="Перейти в каталог туров">каталог туров</a>;</li>
+        <li>Внешний сайт в новой вкладке: <a href="https://www.belavia.by/" target="_blank" rel="noopener noreferrer" hreflang="ru">Белавиа</a>;</li>
+        <li>Электронная почта: <a href="mailto:info@globustravel.by?subject=Вопрос%20по%20путёвке">info@globustravel.by</a>;</li>
+        <li>Телефон: <a href="tel:+375291112233">+375 (29) 111-22-33</a>;</li>
+        <li>Якорь на раздел выше: <a href="#terms">термины и сокращения</a>, <a href="#top">наверх страницы</a>;</li>
+        <li>Скачать документ: <a href="{% static 'agency/docs/tourist-memo.pdf' %}" download="pamyatka-turista.pdf" type="application/pdf">Памятка туриста (PDF)</a>.</li>
+    </ul>
+    <p>Полный список цен по отелям — в <a href="{% url 'price_list' %}">прайс-листе</a>; вопросы — в разделе <a href="{% url 'faq' %}">«Словарь / FAQ»</a>.</p>
+    <address style="font-style: normal;">
+        Адрес офиса: г. Минск, пр-т Независимости, 1.<br>
+        Режим работы: Пн–Пт, <time datetime="09:00">09:00</time>–<time datetime="18:00">18:00</time>.
+    </address>
+</section>
+
+{# ================= 7. Адаптивные изображения ================= #}
+<section id="images" aria-labelledby="images-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="images-title" style="margin-top: 0;">7. Адаптивные изображения</h2>
+    <p>Меняйте ширину окна браузера: для каждой ширины подставляется <strong>своя</strong> картинка
+        (у <code>src</code> и <code>srcset</code> файлы намеренно разные).</p>
+
+    <figure style="margin: 0 0 24px 0;">
+        <img src="{% static 'agency/img/resp-desktop.jpg' %}"
+            srcset="{% static 'agency/img/resp-mobile.jpg' %} 480w, {% static 'agency/img/resp-tablet.jpg' %} 800w, {% static 'agency/img/resp-desktop.jpg' %} 1200w"
+            sizes="(max-width: 600px) 480px, (max-width: 992px) 800px, 1200px"
+            alt="Демонстрация адаптивного изображения: красная картинка для телефона, зелёная для планшета, синяя для компьютера"
+            width="1200" height="600" loading="lazy" style="max-width: 100%; height: auto;">
+        <figcaption style="font-size: 13px; color: #666;">Рис. 1. Элемент <code>img</code> с атрибутами <code>srcset</code> и <code>sizes</code>.</figcaption>
+    </figure>
+
+    <figure style="margin: 0;">
+        <picture>
+            <source media="(max-width: 600px)" srcset="{% static 'agency/img/resp-mobile.jpg' %}">
+            <source media="(max-width: 992px)" srcset="{% static 'agency/img/resp-tablet.jpg' %}">
+            <img src="{% static 'agency/img/resp-desktop.jpg' %}" alt="Демонстрация элемента picture" width="1200" height="600" loading="lazy" style="max-width: 100%; height: auto;">
+        </picture>
+        <figcaption style="font-size: 13px; color: #666;">Рис. 2. Элемент <code>picture</code> с несколькими <code>source</code>.</figcaption>
+    </figure>
+</section>
+
+{# ================= 8. Аудио и видео ================= #}
+<section id="media" aria-labelledby="media-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="media-title" style="margin-top: 0;">8. Аудио и видео</h2>
+    <figure style="margin: 0 0 20px 0;">
+        <video controls preload="metadata" width="480" height="270" style="max-width: 100%; height: auto;">
+            <source src="{% static 'agency/media/promo-demo.mp4' %}" type="video/mp4">
+            Ваш браузер не поддерживает видео. <a href="{% static 'agency/media/promo-demo.mp4' %}" download>Скачать ролик</a>.
+        </video>
+        <figcaption style="font-size: 13px; color: #666;">Демонстрационный ролик (элемент <code>video</code>).</figcaption>
+    </figure>
+    <figure style="margin: 0 0 20px 0;">
+        <audio controls preload="none">
+            <source src="{% static 'agency/media/welcome.mp3' %}" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио. <a href="{% static 'agency/media/welcome.mp3' %}" download>Скачать запись</a>.
+        </audio>
+        <figcaption style="font-size: 13px; color: #666;">Приветственный сигнал (элемент <code>audio</code>).</figcaption>
+    </figure>
+    <iframe title="Пример встроенного документа (srcdoc)" width="480" height="70" sandbox
+        srcdoc="&lt;p style='font-family:sans-serif'&gt;Это содержимое загружено во встроенный фрейм (iframe).&lt;/p&gt;"
+        style="max-width: 100%; border: 1px solid #ccc;"></iframe>
+</section>
+
+{# ================= 9. Глобальные атрибуты ================= #}
+<section id="global" aria-labelledby="global-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+    <h2 id="global-title" style="margin-top: 0;">9. Глобальные атрибуты</h2>
+    <ul>
+        <li><span id="ga-id" title="Подсказка из атрибута title">id и title — наведите курсор</span>;</li>
+        <li><span lang="en" translate="no">lang и translate: Have a nice trip!</span>;</li>
+        <li><span contenteditable="true" spellcheck="true" style="border-bottom: 1px dashed #999;">contenteditable — этот текст можно править</span>;</li>
+        <li><span tabindex="0" data-country="turkey" data-stars="5" style="border-bottom: 1px dotted #999;">tabindex и data-* — сфокусируйтесь клавишей Tab</span>;</li>
+        <li><span draggable="true" style="cursor: grab; border-bottom: 1px dotted #999;">draggable — этот текст можно перетаскивать</span>;</li>
+        <li><span dir="rtl">dir="rtl": справа налево</span>;</li>
+        <li><span hidden>hidden — этот текст скрыт</span>атрибут <code>hidden</code> скрывает соседний элемент.</li>
+    </ul>
+</section>
+
+<p><a href="#top">↑ Наверх</a></p>
+{% endblock %}
