@@ -3,47 +3,57 @@
 
 {% block title %}Отзывы — Глобус Тревел{% endblock %}
 {% block meta_description %}Отзывы клиентов турагентства «Глобус Тревел» об отдыхе и обслуживании.{% endblock %}
+{% block body_class %}page--reviews{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 30px;">
-    <h1 style="margin: 0;">Отзывы клиентов</h1>
+<div class="page-head">
+    <h1>Отзывы клиентов</h1>
 
-    {% if user.is_authenticated %}
-    <a href="{% url 'profile' %}?review=1#review-form" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px;">Добавить отзыв</a>
+    {% if can_review %}
+    <a href="#review-form" class="btn btn--success">Добавить отзыв</a>
+    {% elif user.is_authenticated %}
+    <a href="{% url 'profile' %}?review=1#review-form" class="btn">Добавить отзыв</a>
     {% else %}
-    <a href="{% url 'register' %}" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px;">Добавить отзыв</a>
+    <a href="{% url 'register' %}" class="btn">Добавить отзыв</a>
     {% endif %}
 </div>
 
 {% if not user.is_authenticated %}
-<aside style="background: #fff5f5; border: 1px solid #eee; border-left: 4px solid #d9534f; padding: 16px 20px; border-radius: 4px; margin-bottom: 30px;">
-    <p style="margin: 0; font-size: 15px;">
+<aside class="notice notice--danger">
+    <p>
         Отзывы могут оставлять только зарегистрированные клиенты.
-        <a href="{% url 'register' %}" style="font-weight: bold;">Зарегистрируйтесь</a> или
-        <a href="{% url 'login' %}" style="font-weight: bold;">войдите в аккаунт</a>, чтобы заполнить форму.
+        <a href="{% url 'register' %}"><strong>Зарегистрируйтесь</strong></a> или
+        <a href="{% url 'login' %}"><strong>войдите в аккаунт</strong></a>, чтобы заполнить форму.
     </p>
 </aside>
 {% elif not can_review %}
-<aside style="background: #fffaf0; border: 1px solid #eee; border-left: 4px solid #f0ad4e; padding: 16px 20px; border-radius: 4px; margin-bottom: 30px;">
-    <p style="margin: 0; font-size: 15px;">Отзывы об услугах оставляют только пользователи с ролью клиента.</p>
+<aside class="notice notice--warning">
+    <p>Отзывы об услугах оставляют только пользователи с ролью клиента.</p>
 </aside>
 {% endif %}
 
-<section aria-label="Список отзывов" style="margin-top: 20px;">
+<section aria-label="Список отзывов" class="reviews">
     {% for review in all_reviews %}
-    <article itemscope itemtype="https://schema.org/Review" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-            <strong itemprop="author">{{ review.author_name }}</strong>
-            <span itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" style="font-weight: bold; font-size: 14px;">
+    <article itemscope itemtype="https://schema.org/Review" class="review">
+        <header class="review__head">
+            <strong itemprop="author" class="review__author">{{ review.author_name }}</strong>
+            <span itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating" class="review__rating" data-rating="{{ review.rating }}">
                 <meta itemprop="bestRating" content="5">
-                <span itemprop="ratingValue">{{ review.rating }}</span> ★
+                <span itemprop="ratingValue" class="review__rating-value">{{ review.rating }}</span>
             </span>
-        </div>
-        <p itemprop="reviewBody" style="margin: 0 0 10px 0; font-size: 15px; line-height: 1.5;">{{ review.text }}</p>
-        <small style="color: #888;">Добавлен: <time datetime="{{ review.date_created|date:'c' }}">{% dt_dual review.date_created %}</time> · Изменён: {% dt_dual review.updated_at %}</small>
+        </header>
+        <p itemprop="reviewBody" class="review__text">{{ review.text }}</p>
+        <small class="meta">Добавлен: <time datetime="{{ review.date_created|date:'c' }}">{% dt_dual review.date_created %}</time> · Изменён: {% dt_dual review.updated_at %}</small>
     </article>
     {% empty %}
-    <p style="color: #666; text-align: center; margin-top: 40px;">Отзывов пока нет. Будьте первым, кто поделится впечатлениями!</p>
+    <p class="empty-state">Отзывов пока нет. Будьте первым, кто поделится впечатлениями!</p>
     {% endfor %}
 </section>
+
+{% if can_review %}
+<section id="review-form" aria-labelledby="review-title" class="card review-form-card">
+    <h2 id="review-title">Оставить отзыв</h2>
+    {% include 'agency/includes/review_form.html' %}
+</section>
+{% endif %}
 {% endblock %}

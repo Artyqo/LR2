@@ -2,13 +2,13 @@
 {% load static %}
 {% block title %}О компании — Глобус Тревел{% endblock %}
 {% block meta_description %}О турагентстве «Глобус Тревел»: история по годам, реквизиты, видео о компании и свидетельство о регистрации.{% endblock %}
+{% block body_class %}page--about{% endblock %}
 {% block content %}
-<article itemscope itemtype="https://schema.org/Organization">
+<article itemscope itemtype="https://schema.org/Organization" class="about">
     <h1>О компании</h1>
 
-
-    <nav aria-label="Содержание страницы" style="margin-bottom: 20px;">
-        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px;">
+    <nav aria-label="Содержание страницы" class="page-toc">
+        <ul class="page-toc__list">
             <li><a href="#about-text">О нас</a></li>
             <li><a href="#about-video">Видео</a></li>
             <li><a href="#about-history">История</a></li>
@@ -18,80 +18,95 @@
         </ul>
     </nav>
 
-    <section id="about-text" aria-labelledby="about-text-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h2 id="about-text-title" style="margin-top: 0;">Кто мы</h2>
-        <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
-            {% if company_info.logo %}
-            <img src="{{ company_info.logo.url }}" alt="Логотип компании «Глобус Тревел»" width="240" height="96" itemprop="logo" style="max-width: 100%; height: auto;">
-            {% else %}
-            <img src="{% static 'agency/img/logo.svg' %}" alt="Логотип компании «Глобус Тревел»" width="167" height="40" itemprop="logo" style="max-width: 100%; height: auto;">
-            {% endif %}
-            <p itemprop="description" style="flex: 1; min-width: 240px; margin: 0;">{{ company_info.text|default:"Информационное наполнение подгружено из базы данных." }}</p>
+    <section id="about-text" aria-labelledby="about-text-title" class="card about-section">
+        <h2 id="about-text-title">Кто мы</h2>
+        <div class="about-intro">
+            <div class="about-logo">
+                {% if company_info.logo %}
+                <img src="{{ company_info.logo.url }}" alt="Логотип компании «Глобус Тревел»" width="240" height="96" itemprop="logo" class="about-logo__img">
+                {% else %}
+                <img src="{% static 'agency/img/logo.svg' %}" alt="Логотип компании «Глобус Тревел»" width="200" height="48" itemprop="logo" class="about-logo__img">
+                {% endif %}
+            </div>
+            <div class="prose about-intro__text" itemprop="description">
+                <p>{{ company_info.text|default:"Информационное наполнение подгружено из базы данных." }}</p>
+            </div>
         </div>
     </section>
 
-    <section id="about-video" aria-labelledby="about-video-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h2 id="about-video-title" style="margin-top: 0;">Видео о компании</h2>
+    <section id="about-video" aria-labelledby="about-video-title" class="card about-section">
+        <h2 id="about-video-title">Видео о компании</h2>
         {% if company_info.video_file %}
-        <figure style="margin: 0;">
-            <video controls preload="metadata" width="640" height="360" poster="{% get_media_prefix %}company/poster.jpg" style="max-width: 100%; height: auto;">
+        <figure class="media-frame">
+            <video controls preload="metadata" width="640" height="360" poster="{% get_media_prefix %}company/poster.jpg" class="media-frame__video">
                 <source src="{{ company_info.video_file.url }}" type="video/mp4">
                 Ваш браузер не поддерживает воспроизведение видео.
                 <a href="{{ company_info.video_file.url }}" download>Скачать видео</a>
             </video>
-            <figcaption style="font-size: 13px; color: #666;">Рекламный ролик агентства «Глобус Тревел» (демонстрационное видео)</figcaption>
+            <figcaption>Рекламный ролик агентства «Глобус Тревел» (демонстрационное видео)</figcaption>
         </figure>
         {% endif %}
         {% if company_info.video_url %}
-        <iframe src="{{ company_info.video_url }}" title="Видео о компании" width="640" height="360" loading="lazy"
-            allowfullscreen style="max-width: 100%; border: 0;"></iframe>
+        <div class="media-frame">
+            <iframe src="{{ company_info.video_url }}" title="Видео о компании" width="640" height="360" loading="lazy"
+                allowfullscreen class="media-frame__video"></iframe>
+        </div>
         {% endif %}
         {% if not company_info.video_file and not company_info.video_url %}
-        <p>Видео пока не добавлено.</p>
+        <p class="muted">Видео пока не добавлено.</p>
         {% endif %}
     </section>
 
-    <section id="about-history" aria-labelledby="about-history-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h2 id="about-history-title" style="margin-top: 0;">История по годам</h2>
+    <section id="about-history" aria-labelledby="about-history-title" class="card about-section">
+        <h2 id="about-history-title">История по годам</h2>
         {% if history %}
-        <ol style="margin: 0; padding-left: 20px;">
+        <ol class="timeline">
             {% for year, event in history %}
-            <li style="margin-bottom: 6px;"><time datetime="{{ year }}"><strong>{{ year }}</strong></time>{% if event %} — {{ event }}{% endif %}</li>
+            <li class="timeline__item">{% if year %}<time datetime="{{ year }}" class="timeline__year">{{ year }}</time>{% endif %}
+                {% if event %}<span class="timeline__event">{{ event }}</span>{% endif %}</li>
             {% endfor %}
         </ol>
         {% else %}
-        <p>История компании пока не добавлена.</p>
+        <p class="muted">История компании пока не добавлена.</p>
         {% endif %}
     </section>
 
-    <section id="about-requisites" aria-labelledby="about-requisites-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h2 id="about-requisites-title" style="margin-top: 0;">Реквизиты</h2>
+    <section id="about-requisites" aria-labelledby="about-requisites-title" class="card about-section">
+        <h2 id="about-requisites-title">Реквизиты</h2>
         {% if requisites %}
-        <dl style="margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px;">
+        <dl class="requisites">
             {% for key, value in requisites %}
-            <dt style="font-weight: bold;">{{ key }}</dt>
-            <dd style="margin: 0;">{{ value }}</dd>
+            <dt>{{ key }}</dt>
+            <dd>{{ value }}</dd>
             {% endfor %}
         </dl>
         {% else %}
-        <p>Реквизиты пока не добавлены.</p>
+        <p class="muted">Реквизиты пока не добавлены.</p>
         {% endif %}
     </section>
 
-    <section id="about-certificate" aria-labelledby="about-certificate-title">
+    <section id="about-certificate" aria-labelledby="about-certificate-title" class="about-section">
         <h2 id="about-certificate-title">Сертификат</h2>
-        {% for line in certificate %}
-        <p>{{ line }}</p>
-        {% empty %}
-        <p>Текст сертификата пока не добавлен.</p>
-        {% endfor %}
+        <div class="certificate">
+            <p class="certificate__registry">Единый реестр туроператоров и турагентов</p>
+            <div class="certificate__text">
+                {% for line in certificate %}
+                <p>{{ line }}</p>
+                {% empty %}
+                <p>Текст сертификата пока не добавлен.</p>
+                {% endfor %}
+            </div>
+            <span class="certificate__seal" aria-hidden="true"><span>Глобус Тревел</span></span>
+        </div>
     </section>
 
-    <section id="about-map" aria-labelledby="about-map-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h2 id="about-map-title" style="margin-top: 0;">Как нас найти</h2>
-        <iframe title="Карта: офис агентства на проспекте Независимости, Минск"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=27.55%2C53.89%2C27.60%2C53.92&amp;layer=mapnik"
-            width="600" height="350" loading="lazy" style="max-width: 100%; border: 1px solid #ccc;"></iframe>
+    <section id="about-map" aria-labelledby="about-map-title" class="card about-section">
+        <h2 id="about-map-title">Как нас найти</h2>
+        <div class="media-frame media-frame--map">
+            <iframe title="Карта: офис агентства на проспекте Независимости, Минск"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=27.55%2C53.89%2C27.60%2C53.92&amp;layer=mapnik"
+                width="600" height="350" loading="lazy"></iframe>
+        </div>
         <p><small><a href="https://www.openstreetmap.org/#map=15/53.905/27.575" target="_blank" rel="noopener noreferrer">Открыть карту в новой вкладке</a></small></p>
     </section>
 </article>

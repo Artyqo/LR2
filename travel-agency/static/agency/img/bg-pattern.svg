@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+  <!-- Фоновый узор сайта: пунктирный маршрут, самолётик и компас -->
+  <g fill="none" stroke="#2b9bd8" stroke-opacity=".10" stroke-width="1.5">
+    <path d="M-10 120 Q40 70 80 100 T170 60" stroke-dasharray="4 6"/>
+    <circle cx="120" cy="125" r="11"/>
+    <path d="M120 116 l3 9 -3 9 -3 -9z" fill="#2b9bd8" fill-opacity=".10"/>
+  </g>
+  <path d="M38 30 l18 -7 -6 18 -7 -3 -6 7 -3 -9z" fill="#0d3b6e" fill-opacity=".07"/>
+  <g fill="#0d3b6e" fill-opacity=".06">
+    <circle cx="20" cy="80" r="1.6"/><circle cx="100" cy="20" r="1.6"/><circle cx="145" cy="95" r="1.6"/><circle cx="60" cy="145" r="1.6"/>
+  </g>
+</svg>

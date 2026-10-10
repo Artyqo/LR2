@@ -1,5 +1,5 @@
 // Слайдер баннеров на главной. Без JS показывается первый баннер.
-// Стили не выносятся в CSS-файл: переключение слайдов меняет inline-свойство display.
+// Слайды переключаются атрибутом hidden, внешний вид задан в pages.css.
 document.addEventListener('DOMContentLoaded', function () {
     var box = document.querySelector('[data-banner]');
     if (!box) { return; }
@@ -11,9 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var timer = null;
 
     function show(index) {
-        slides[current].style.display = 'none';
+        slides[current].hidden = true;
         current = (index + slides.length) % slides.length;
-        slides[current].style.display = 'block';
+        slides[current].hidden = false;
     }
 
     function start() { timer = setInterval(function () { show(current + 1); }, 5000); }

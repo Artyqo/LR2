@@ -1,16 +1,17 @@
 {% extends 'agency/base.html' %}
 
 {% block title %}{{ action }} путевку — Глобус Тревел{% endblock %}
+{% block body_class %}page--tour-form{% endblock %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 0 auto;">
+<div class="form-narrow form-card">
     <h1>{{ action }} путевку</h1>
-    <form method="post" style="margin-top: 20px;">
+    <form method="post" class="tour-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <div style="margin-top: 20px;">
-            <button type="submit" style="display: inline-block; background: #111; color: #fff; padding: 8px 16px; text-decoration: none; border-radius: 4px; font-size: 14px; border: none; cursor: pointer; width: auto; box-sizing: border-box;">{{ action }}</button>
-            <a href="{% url 'tour_list' %}" style="margin-left: 15px; color: #666; text-decoration: none;">Отмена</a>
+        <div class="btn-row">
+            <button type="submit" class="btn">{{ action }}</button>
+            <a href="{% url 'tour_list' %}" class="btn btn--light">Отмена</a>
         </div>
     </form>
     <script>

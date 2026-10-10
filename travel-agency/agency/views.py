@@ -269,19 +269,23 @@ def guide(request):
 
 def price_list(request):
     """Прайс-лист: таблица с заголовочными и объединёнными ячейками (только данные)."""
-    countries = Country.objects.prefetch_related('hotels').order_by('name')
+    countries = Country.objects.prefetch_related('hotels__tours').order_by('name')
+    today = datetime.date.today()
     rows = []
     all_prices = []
     for country in countries:
         hotels = []
-        for hotel in country.hotels.all().order_by('stars', 'name'):
+        for hotel in sorted(country.hotels.all(), key=lambda h: (h.stars, h.name)):
             per_day = hotel.price_per_day
             all_prices.append(per_day)
+            # Ближайший вылет; если туров нет — ячейка таблицы остаётся пустой
+            upcoming = [t.departure_date for t in hotel.tours.all() if t.departure_date >= today]
             hotels.append({
                 'hotel': hotel,
                 'week1': per_day * 7,
                 'week2': per_day * 14,
                 'week4': per_day * 28,
+                'next_departure': min(upcoming) if upcoming else None,
             })
         if hotels:
             rows.append({'country': country, 'hotels': hotels, 'span': len(hotels)})

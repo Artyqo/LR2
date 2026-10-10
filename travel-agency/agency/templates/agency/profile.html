@@ -1,47 +1,32 @@
 {% extends 'agency/base.html' %}
 
 {% block title %}Личный кабинет — Глобус Тревел{% endblock %}
+{% block body_class %}page--profile{% endblock %}
 
 {% block content %}
 
 {# ====== БЛОК ВРЕМЕНИ — отображается для всех ролей ====== #}
-<div style="border: 1px solid #eee; padding: 20px; margin-bottom: 30px; border-radius: 4px; background: #fafafa;">
-    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-start;">
+<div class="card card--muted time-panel">
+    <div class="time-panel__col">
+        <h4 class="time-panel__title">🌍 Ваша тайм-зона</h4>
+        <p class="time-panel__tz">{{ user_tz_name }}</p>
+        <p class="time-panel__now">Сейчас у вас: <strong>{{ local_now_str }}</strong></p>
+        <p class="meta">UTC: {{ utc_now_str }}</p>
+    </div>
 
-        <div>
-            <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #555;">🌍 Ваша тайм-зона</h4>
-            <p style="margin: 0; font-weight: bold; font-size: 16px;">{{ user_tz_name }}</p>
-            <p style="margin: 4px 0 0 0; font-size: 15px;">
-                Сейчас у вас: <strong>{{ local_now_str }}</strong>
-            </p>
-            <p style="margin: 4px 0 0 0; font-size: 13px; color: #777;">
-                UTC: {{ utc_now_str }}
-            </p>
-        </div>
-
-        <div>
-            <h4 style="margin: 0 0 10px 0; font-size: 14px; color: #555;">📅 Календарь</h4>
-            <pre style="
-                font-family: monospace;
-                font-size: 13px;
-                line-height: 1.6;
-                margin: 0;
-                color: #333;
-                background: transparent;
-            ">{{ cal_text }}</pre>
-        </div>
-
+    <div class="time-panel__col">
+        <h4 class="time-panel__title">📅 Календарь</h4>
+        <pre class="time-panel__calendar">{{ cal_text }}</pre>
     </div>
 </div>
 {# ====== КОНЕЦ БЛОКА ВРЕМЕНИ ====== #}
 
-<div style="margin-bottom: 40px;">
+<div class="profile-head">
     <h1>Личный кабинет</h1>
-    <p style="color: #666;">
+    <p class="muted">
         Пользователь: <strong>{{ request.user.username }}</strong> |
         Роль в системе:
-        <span
-            style="background: #111; color: #fff; padding: 4px 8px; font-size: 12px; border-radius: 3px; font-weight: bold;">{{ role_label }}</span>
+        <span class="badge">{{ role_label }}</span>
     </p>
 </div>
 
@@ -49,7 +34,7 @@
 {# БЛОК ОТОБРАЖЕНИЯ ДЛЯ КЛИЕНТА #}
 {# ========================================================================= #}
 {% if role == 'client' %}
-<div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
+<div class="card">
     <h3>Ваши личные данные</h3>
     <p><strong>ФИО:</strong> {{ client.last_name }} {{ client.first_name }} {{ client.middle_name|default:"" }}</p>
     <p><strong>Телефон:</strong> {{ client.phone }}</p>
@@ -59,89 +44,74 @@
 {% if orders %}
 {% with orders.0 as last_order %}
 {% if last_order.employee %}
-<div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px; background: #f9f9ff; border-left: 4px solid #007bff; margin-top: 20px;">
-    <h4 style="margin-top: 0;">Ваш персональный менеджер</h4>
+<div class="card card--accent">
+    <h4>Ваш персональный менеджер</h4>
     <p><strong>{{ last_order.employee.full_name }}</strong></p>
-    <p style="font-size: 14px; color: #555;">{{ last_order.employee.position }}</p>
-    <p style="font-size: 14px; color: #555;">Телефон: {{ last_order.employee.phone }}</p>
-    <p style="font-size: 14px; color: #555;">Email: {{ last_order.employee.email }}</p>
+    <p class="muted">{{ last_order.employee.position }}</p>
+    <p class="muted">Телефон: {{ last_order.employee.phone }}</p>
+    <p class="muted">Email: {{ last_order.employee.email }}</p>
 </div>
 {% endif %}
 {% endwith %}
 {% endif %}
 
-<h2 style="margin-top: 40px;">Информация о ваших покупках</h2>
+<h2>Информация о ваших покупках</h2>
 {% if orders %}
 {% for order in orders %}
-<div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px; border-left: 4px solid #28a745;">
-    <div style="display: flex; justify-content: space-between;">
+<div class="card card--success order">
+    <div class="order__head">
         <strong>Заказ №{{ order.id }}</strong>
-        <span style="color: #666;">
-            {{ order.created_at_local_str }} | UTC: {{ order.created_at_utc_str }}
-        </span>
+        <span class="muted">{{ order.created_at_local_str }} | UTC: {{ order.created_at_utc_str }}</span>
     </div>
-    <table style="border-collapse: collapse; width: 100%; margin-top: 10px;">
+    <div class="table-wrap">
+    <table class="table">
         <thead>
             <tr>
-                <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Путевка / Направление</th>
-                <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Отель</th>
-                <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Длительность</th>
-                <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Дата вылета</th>
+                <th>Путевка / Направление</th>
+                <th>Отель</th>
+                <th>Длительность</th>
+                <th>Дата вылета</th>
             </tr>
         </thead>
         <tbody>
             {% for tour in order.tours.all %}
             <tr>
-                <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ tour.title }}</strong></td>
-                <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ tour.hotel.name }} {{ tour.hotel.stars }}★</td>
-                <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ tour.get_duration_weeks_display }}</td>
-                <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ tour.departure_date|date:"d/m/Y" }}</td>
+                <td><strong>{{ tour.title }}</strong></td>
+                <td>{{ tour.hotel.name }} {{ tour.hotel.stars }}★</td>
+                <td>{{ tour.get_duration_weeks_display }}</td>
+                <td class="nowrap">{{ tour.departure_date|date:"d/m/Y" }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div style="text-align: right; margin-top: 15px; font-size: 16px;">
-        Итоговая стоимость: <strong>{{ order.total_cost }} BYN</strong>
     </div>
+    <p class="order__total">Итоговая стоимость: <strong>{{ order.total_cost }} BYN</strong></p>
 </div>
 {% endfor %}
 {% else %}
-<p style="color: #666;">Вы еще не приобрели ни одной путевки.</p>
+<p class="muted">Вы еще не приобрели ни одной путевки.</p>
 {% endif %}
 
-<h2 style="margin-top: 40px;">Доступные вам промокоды и купоны</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+<h2>Доступные вам промокоды и купоны</h2>
+<ul class="coupons coupons--compact">
     {% for promo in promocodes %}
-    <div style="border: 1px dashed #28a745; padding: 20px; margin-bottom: 20px; border-radius: 4px; text-align: center; background: #fdfdfe;">
-        <span style="font-size: 18px; font-weight: bold; color: #28a745; display: block;">{{ promo.code }}</span>
-        <small style="color: #666;">Скидка: {{ promo.discount_amount }}%</small>
-    </div>
+    <li class="coupon">
+        <span class="coupon__discount">−{{ promo.discount_amount }}%</span>
+        <span class="coupon__body">
+            <code class="coupon__code" title="Введите этот код на странице оплаты">{{ promo.code }}</code>
+            <span class="coupon__note">Скидка: {{ promo.discount_amount }}%</span>
+        </span>
+    </li>
     {% empty %}
-    <p style="color: #666;">Действующих промокодов пока нет.</p>
+    <li class="muted">Действующих промокодов пока нет.</li>
     {% endfor %}
-</div>
+</ul>
 
-<section id="review-form" aria-labelledby="review-title" style="margin-top: 40px;">
+<section id="review-form" aria-labelledby="review-title">
     <h2 id="review-title">Оставить отзыв</h2>
-    <details style="border: 1px solid #eee; border-radius: 6px; padding: 14px 18px;" {% if request.GET.review %}open{% endif %}>
-        <summary style="cursor: pointer; font-weight: bold;">Добавить отзыв</summary>
-        <form method="post" action="{% url 'reviews' %}" style="margin-top: 16px; max-width: 520px;">
-            {% csrf_token %}
-            <input type="hidden" name="author_name" value="{{ request.user.username }}">
-            <p style="margin: 0 0 10px 0;">Отзыв будет опубликован от имени: <strong>{{ request.user.username }}</strong></p>
-            <label for="review-rating" style="display: block; font-size: 13px; color: #555;">Оценка</label>
-            <select id="review-rating" name="rating" required style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; font-family: inherit;">
-                <option value="5">5 ★★★★★</option>
-                <option value="4">4 ★★★★</option>
-                <option value="3">3 ★★★</option>
-                <option value="2">2 ★★</option>
-                <option value="1">1 ★</option>
-            </select>
-            <label for="review-text" style="display: block; font-size: 13px; color: #555;">Текст отзыва (не менее 10 символов)</label>
-            <textarea id="review-text" name="text" rows="5" required minlength="10" maxlength="2000"
-                placeholder="Поделитесь впечатлениями о путешествии..." style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; font-family: inherit;"></textarea>
-            <button type="submit" style="background: #111; color: #fff; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Отправить</button>
-        </form>
+    <details class="review-details" {% if request.GET.review %}open{% endif %}>
+        <summary class="review-details__summary">Добавить отзыв</summary>
+        {% include 'agency/includes/review_form.html' %}
     </details>
 </section>
 
@@ -149,75 +119,77 @@
 {# БЛОК ОТОБРАЖЕНИЯ ДЛЯ СОТРУДНИКА #}
 {# ========================================================================= #}
 {% elif role == 'employee' %}
-<div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px; background: #fdfdfd;">
+<div class="card">
     <h3>Карточка сотрудника</h3>
     <p><strong>Менеджер:</strong> {{ employee.full_name }}</p>
     <p><strong>Должность:</strong> {{ employee.position }}</p>
     <p><strong>Рабочий телефон:</strong> {{ employee.phone }}</p>
 </div>
 
-<h2 style="margin-top: 40px;">Информация о продажах путевок и клиентах (В работе)</h2>
+<h2>Информация о продажах путевок и клиентах (В работе)</h2>
 {% if orders %}
-<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+<div class="table-wrap">
+<table class="table">
     <thead>
         <tr>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">№ Сделки</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Дата</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Данные клиента</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Проданные путевки</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Сумма продажи</th>
+            <th>№ Сделки</th>
+            <th>Дата</th>
+            <th>Данные клиента</th>
+            <th>Проданные путевки</th>
+            <th>Сумма продажи</th>
         </tr>
     </thead>
     <tbody>
         {% for order in orders %}
         <tr>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ order.id }}</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
-                <div style="white-space: nowrap;">
-                    <div>{{ order.local_time_str }}</div>
-                    <div style="font-size: 12px; color: #7a7a7a;">UTC: {{ order.utc_time_str }}</div>
-                </div>
+            <td>{{ order.id }}</td>
+            <td class="nowrap">
+                <div>{{ order.local_time_str }}</div>
+                <div class="meta">UTC: {{ order.utc_time_str }}</div>
             </td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+            <td>
                 <strong>{{ order.client.last_name }} {{ order.client.first_name }}</strong><br>
-                <small style="color: #555;">Тел: {{ order.client.phone }}</small>
+                <small class="muted">Тел: {{ order.client.phone }}</small>
             </td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+            <td>
                 {% for tour in order.tours.all %}
                 • {{ tour.title }} ({{ tour.get_duration_weeks_display }})<br>
                 {% endfor %}
             </td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ order.total_cost }} BYN</strong></td>
+            <td class="num"><strong>{{ order.total_cost }} BYN</strong></td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% else %}
-<p style="color: #666;">У вас пока нет оформленных продаж.</p>
+<p class="muted">У вас пока нет оформленных продаж.</p>
 {% endif %}
 
-<h2 style="margin-top: 40px;">Мои клиенты</h2>
+<h2>Мои клиенты</h2>
 {% if my_clients %}
-<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+<div class="table-wrap">
+<table class="table">
     <thead>
         <tr>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">ФИО</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Телефон</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Адрес</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>Адрес</th>
         </tr>
     </thead>
     <tbody>
         {% for c in my_clients %}
         <tr>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ c.last_name }} {{ c.first_name }} {{ c.middle_name|default:"" }}</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ c.phone }}</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ c.address }}</td>
+            <td>{{ c.last_name }} {{ c.first_name }} {{ c.middle_name|default:"" }}</td>
+            <td class="nowrap">{{ c.phone }}</td>
+            <td>{{ c.address }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 {% else %}
-<p style="color: #666;">У вас пока нет клиентов.</p>
+<p class="muted">У вас пока нет клиентов.</p>
 {% endif %}
 
 {# ========================================================================= #}
@@ -226,57 +198,58 @@
 {% elif role == 'admin' %}
 
 <h2>1. Клиенты с указанием личных данных и инфо о путевках</h2>
-<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+<div class="table-wrap">
+<table class="table">
     <thead>
         <tr>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Профиль / Личные данные клиента</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Контакты и адрес</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Информация о купленных путевках</th>
+            <th>Профиль / Личные данные клиента</th>
+            <th>Контакты и адрес</th>
+            <th>Информация о купленных путевках</th>
         </tr>
     </thead>
     <tbody>
         {% for c in clients %}
         <tr>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ c.last_name }} {{ c.first_name }} {{ c.middle_name|default:"" }}</strong></td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+            <td><strong>{{ c.last_name }} {{ c.first_name }} {{ c.middle_name|default:"" }}</strong></td>
+            <td>
                 Адрес: {{ c.address }}<br>
                 Телефон: {{ c.phone }}
             </td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
+            <td class="small-text">
                 {% if c.orders.all %}
                 {% for order in c.orders.all %}
                 {% for tour in order.tours.all %}
-                <div style="margin-bottom: 5px; font-size: 13px;">
-                    • {{ tour.title }} | Отель: {{ tour.hotel.name }} | Вылет: {{ tour.departure_date|date:"d/m/Y" }}
-                </div>
+                <div>• {{ tour.title }} | Отель: {{ tour.hotel.name }} | Вылет: {{ tour.departure_date|date:"d/m/Y" }}</div>
                 {% endfor %}
                 {% endfor %}
                 {% else %}
-                <span style="color: #999; font-size: 13px;">Нет купленных путевок</span>
+                <span class="muted">Нет купленных путевок</span>
                 {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 
-<h2 style="margin-top: 50px;">2. Список отелей по странам с указанием спецификации климата</h2>
-<table style="border-collapse: collapse; width: 100%; margin-top: 20px;">
+<h2>2. Список отелей по странам с указанием спецификации климата</h2>
+<div class="table-wrap">
+<table class="table">
     <thead>
         <tr>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Страна назначения</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Название отеля / Класс</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Стоимость в сутки</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Особенности климата по всем сезонам</th>
+            <th>Страна назначения</th>
+            <th>Название отеля / Класс</th>
+            <th>Стоимость в сутки</th>
+            <th>Особенности климата по всем сезонам</th>
         </tr>
     </thead>
     <tbody>
         {% for h in hotels %}
         <tr>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ h.country.name }}</strong></td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ h.name }} ({{ h.stars }}★)</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ h.price_per_day }} BYN</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left; font-size: 13px; color: #444; line-height: 1.4;">
+            <td><strong>{{ h.country.name }}</strong></td>
+            <td>{{ h.name }} ({{ h.stars }}★)</td>
+            <td class="num">{{ h.price_per_day }} BYN</td>
+            <td class="small-text">
                 ❄️ <strong>Зима:</strong> {{ h.country.climate_winter }}<br>
                 🌱 <strong>Весна:</strong> {{ h.country.climate_spring }}<br>
                 ☀️ <strong>Лето:</strong> {{ h.country.climate_summer }}<br>
@@ -286,30 +259,29 @@
         {% endfor %}
     </tbody>
 </table>
+</div>
 
-<h2 style="margin-top: 50px;">3. Количество путевок по клиентам с указанием общей стоимости</h2>
-<table style="border-collapse: collapse; width: 100%; margin-top: 20px; margin-bottom: 50px;">
+<h2>3. Количество путевок по клиентам с указанием общей стоимости</h2>
+<div class="table-wrap">
+<table class="table">
     <thead>
         <tr>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Клиент (ФИО)</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Зарегистрировано путевок</th>
-            <th style="border: 1px solid #eee; padding: 10px; text-align: left; background-color: #f9f9f9;">Суммарная стоимость всех покупок</th>
+            <th>Клиент (ФИО)</th>
+            <th>Зарегистрировано путевок</th>
+            <th>Суммарная стоимость всех покупок</th>
         </tr>
     </thead>
     <tbody>
         {% for c in clients %}
         <tr>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">{{ c.last_name }} {{ c.first_name }}</td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;"><strong>{{ c.total_tours_count }} шт.</strong></td>
-            <td style="border: 1px solid #eee; padding: 10px; text-align: left;">
-                <span style="color: #28a745; font-weight: bold;">
-                    {% if c.total_spent %}{{ c.total_spent }}{% else %}0.00{% endif %} BYN
-                </span>
-            </td>
+            <td>{{ c.last_name }} {{ c.first_name }}</td>
+            <td class="num"><strong>{{ c.total_tours_count }} шт.</strong></td>
+            <td class="num money">{% if c.total_spent %}{{ c.total_spent }}{% else %}0.00{% endif %} BYN</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endif %}
 {% endblock %}

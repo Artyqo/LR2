@@ -10,30 +10,31 @@ import pytz
 TIMEZONE_CHOICES = [(tz, tz) for tz in pytz.common_timezones]
 
 
-INPUT_STYLE = ('width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; '
-               'border-radius: 4px; margin-bottom: 10px; font-family: inherit;')
+INPUT_CLASS = 'form-control'
 
 
-def apply_inline_styles(form):
-    """Внешнего CSS нет: поля, которые рисует Django, получают стиль атрибутом style."""
+def apply_css_classes(form):
+    """Поля, которые рисует Django, получают CSS-класс; оформление — в static/agency/css/style.css."""
     for field in form.fields.values():
         widget = field.widget
         if isinstance(widget, (forms.CheckboxInput, forms.RadioSelect, forms.HiddenInput)):
             continue
-        widget.attrs.setdefault('style', INPUT_STYLE)
+        classes = widget.attrs.get('class', '').split()
+        if INPUT_CLASS not in classes:
+            widget.attrs['class'] = ' '.join(classes + [INPUT_CLASS])
 
 
-class InlineStyledFormMixin:
+class StyledFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        apply_inline_styles(self)
+        apply_css_classes(self)
 
 
-class StyledAuthenticationForm(InlineStyledFormMixin, AuthenticationForm):
-    """Форма входа с inline-стилями полей."""
+class StyledAuthenticationForm(StyledFormMixin, AuthenticationForm):
+    """Форма входа: поля с классом form-control."""
 
 
-class TourForm(InlineStyledFormMixin, forms.ModelForm):
+class TourForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Tour
         fields = ['hotel', 'title', 'duration_weeks', 'departure_date', 'is_hot']
@@ -42,7 +43,7 @@ class TourForm(InlineStyledFormMixin, forms.ModelForm):
         }
 
 
-class ClientRegistrationForm(InlineStyledFormMixin, UserCreationForm):
+class ClientRegistrationForm(StyledFormMixin, UserCreationForm):
     last_name = forms.CharField(
         label="Фамилия",
         max_length=100,
