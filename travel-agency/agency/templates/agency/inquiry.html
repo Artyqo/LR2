@@ -1,47 +1,48 @@
 {% extends 'agency/base.html' %}
 {% block title %}Заявка на подбор тура — Глобус Тревел{% endblock %}
 {% block meta_description %}Оставьте заявку на подбор тура: укажите страну, даты, бюджет — менеджер свяжется с вами.{% endblock %}
+{% block body_class %}page--inquiry{% endblock %}
 {% block content %}
 <h1>Заявка на подбор тура</h1>
-<p>Поля, отмеченные <span aria-hidden="true" style="color: #dc3545;">*</span>, обязательны. Данные проверяются в браузере и повторно на сервере.</p>
+<p class="lead">Поля, отмеченные <span aria-hidden="true" class="req">*</span>, обязательны (выделены жёлтой полосой слева). Данные проверяются в браузере и повторно на сервере.</p>
 
-<form method="post" action="{% url 'inquiry' %}" autocomplete="on" style="max-width: 640px;">
+<form method="post" action="{% url 'inquiry' %}" autocomplete="on" class="inquiry-form">
     {% csrf_token %}
 
-    <fieldset style="border: 1px solid #eee; border-radius: 6px; padding: 16px 20px; margin: 0 0 20px 0;">
-        <legend style="padding: 0 8px; font-weight: bold;">Контактные данные</legend>
+    <fieldset>
+        <legend>Контактные данные</legend>
 
-        <label for="id_name" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Имя <span aria-hidden="true" style="color: #dc3545;">*</span></label>
+        <label for="id_name" class="form-label">Имя <span aria-hidden="true" class="req">*</span></label>
         <input type="text" id="id_name" name="name" value="{{ form.name.value|default:'' }}" required minlength="2" maxlength="100"
-            autocomplete="name" placeholder="Иван Иванов" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.name.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.name.errors.0 }}</p>{% endif %}
+            autocomplete="name" placeholder="Иван Иванов" class="form-control">
+        {% if form.name.errors %}<p role="alert" class="field-error">{{ form.name.errors.0 }}</p>{% endif %}
 
-        <label for="id_email" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">E-mail <span aria-hidden="true" style="color: #dc3545;">*</span></label>
+        <label for="id_email" class="form-label">E-mail <span aria-hidden="true" class="req">*</span></label>
         <input type="email" id="id_email" name="email" value="{{ form.email.value|default:'' }}" required
-            autocomplete="email" placeholder="name@example.com" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.email.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.email.errors.0 }}</p>{% endif %}
+            autocomplete="email" placeholder="name@example.com" class="form-control">
+        {% if form.email.errors %}<p role="alert" class="field-error">{{ form.email.errors.0 }}</p>{% endif %}
 
-        <label for="id_phone" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Телефон <span aria-hidden="true" style="color: #dc3545;">*</span></label>
+        <label for="id_phone" class="form-label">Телефон <span aria-hidden="true" class="req">*</span></label>
         <input type="tel" id="id_phone" name="phone" value="{{ form.phone.value|default:'' }}" required
             pattern="\+375 \((25|29|33|44)\) \d{3}-\d{2}-\d{2}" title="Формат: +375 (29) XXX-XX-XX. Коды: 25, 29, 33, 44"
-            autocomplete="tel" placeholder="+375 (29) 123-45-67" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.phone.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.phone.errors.0 }}</p>{% endif %}
+            autocomplete="tel" placeholder="+375 (29) 123-45-67" class="form-control">
+        {% if form.phone.errors %}<p role="alert" class="field-error">{{ form.phone.errors.0 }}</p>{% endif %}
     </fieldset>
 
-    <fieldset style="border: 1px solid #eee; border-radius: 6px; padding: 16px 20px; margin: 0 0 20px 0;">
-        <legend style="padding: 0 8px; font-weight: bold;">Параметры поездки</legend>
+    <fieldset>
+        <legend>Параметры поездки</legend>
 
-        <label for="id_country" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Желаемая страна</label>
-        <select id="id_country" name="country" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
+        <label for="id_country" class="form-label">Желаемая страна</label>
+        <select id="id_country" name="country" class="form-control">
             <option value="">— любая —</option>
             {% for c in form.fields.country.queryset %}
             <option value="{{ c.pk }}"{% if form.country.value|stringformat:"s" == c.pk|stringformat:"s" %} selected{% endif %}>{{ c.name }}</option>
             {% endfor %}
         </select>
-        {% if form.country.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.country.errors.0 }}</p>{% endif %}
+        {% if form.country.errors %}<p role="alert" class="field-error">{{ form.country.errors.0 }}</p>{% endif %}
 
-        <label for="id_departure_city" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Город вылета</label>
-        <input type="text" id="id_departure_city" name="departure_city" value="{{ form.departure_city.value|default:'' }}" list="cities" maxlength="60" placeholder="Начните вводить" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
+        <label for="id_departure_city" class="form-label">Город вылета</label>
+        <input type="text" id="id_departure_city" name="departure_city" value="{{ form.departure_city.value|default:'' }}" list="cities" maxlength="60" placeholder="Начните вводить" class="form-control">
         <datalist id="cities">
             <option value="Минск"></option>
             <option value="Гомель"></option>
@@ -51,19 +52,26 @@
             <option value="Могилёв"></option>
         </datalist>
 
-        <label for="id_departure_date" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Желаемая дата вылета <span aria-hidden="true" style="color: #dc3545;">*</span></label>
-        <input type="date" id="id_departure_date" name="departure_date" value="{{ form.departure_date.value|default:'' }}" required
-            min="{% now 'Y-m-d' %}" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.departure_date.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.departure_date.errors.0 }}</p>{% endif %}
+        <div class="form-row">
+            <div>
+                <label for="id_departure_date" class="form-label">Желаемая дата вылета <span aria-hidden="true" class="req">*</span></label>
+                <input type="date" id="id_departure_date" name="departure_date" value="{{ form.departure_date.value|default:'' }}" required
+                    min="{% now 'Y-m-d' %}" class="form-control">
+                <p class="range-hint">Дата вылета не может быть в прошлом.</p>
+                {% if form.departure_date.errors %}<p role="alert" class="field-error">{{ form.departure_date.errors.0 }}</p>{% endif %}
+            </div>
+            <div>
+                <label for="id_adults" class="form-label">Количество взрослых (1–10) <span aria-hidden="true" class="req">*</span></label>
+                <input type="number" id="id_adults" name="adults" value="{{ form.adults.value|default:'1' }}" required min="1" max="10" step="1" class="form-control">
+                <p class="range-hint">Допустимо от 1 до 10 взрослых.</p>
+                {% if form.adults.errors %}<p role="alert" class="field-error">{{ form.adults.errors.0 }}</p>{% endif %}
+            </div>
+        </div>
 
-        <label for="id_adults" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Количество взрослых (1–10) <span aria-hidden="true" style="color: #dc3545;">*</span></label>
-        <input type="number" id="id_adults" name="adults" value="{{ form.adults.value|default:'1' }}" required min="1" max="10" step="1" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.adults.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.adults.errors.0 }}</p>{% endif %}
+        <p><label class="choice"><input type="checkbox" name="with_children" value="on"{% if form.with_children.value %} checked{% endif %}> <span>Поездка с детьми</span></label></p>
 
-        <p style="margin: 10px 0 0 0;"><label style="font-size: 14px;"><input type="checkbox" name="with_children" value="on"{% if form.with_children.value %} checked{% endif %}> Поездка с детьми</label></p>
-
-        <label for="id_meal_plan" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Тип питания</label>
-        <select id="id_meal_plan" name="meal_plan" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
+        <label for="id_meal_plan" class="form-label">Тип питания</label>
+        <select id="id_meal_plan" name="meal_plan" class="form-control">
             <optgroup label="Без готовки">
                 {% for code, label in form.fields.meal_plan.choices %}
                 <option value="{{ code }}"{% if form.meal_plan.value == code or not form.meal_plan.value and code == 'BB' %} selected{% endif %}>{{ label }} ({{ code }})</option>
@@ -71,40 +79,43 @@
             </optgroup>
         </select>
 
-        <label for="id_budget" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Бюджет на человека, BYN: <output id="budget-out" for="id_budget" style="font-weight: bold;">{{ form.budget.value|default:'1000' }}</output></label>
+        <label for="id_budget" class="form-label">Бюджет на человека, BYN: <output id="budget-out" for="id_budget">{{ form.budget.value|default:'1000' }}</output></label>
         <input type="range" id="id_budget" name="budget" value="{{ form.budget.value|default:'1000' }}" min="100" max="10000" step="100"
-            oninput="document.getElementById('budget-out').value = this.value" style="width: 100%;">
-        {% if form.budget.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.budget.errors.0 }}</p>{% endif %}
+            oninput="document.getElementById('budget-out').value = this.value">
+        {% if form.budget.errors %}<p role="alert" class="field-error">{{ form.budget.errors.0 }}</p>{% endif %}
+
+        {# Заблокированный элемент формы: валюта бюджета не меняется #}
+        <label for="id_currency" class="form-label">Валюта бюджета</label>
+        <input type="text" id="id_currency" value="BYN — белорусский рубль" disabled class="form-control">
     </fieldset>
 
-    <fieldset style="border: 1px solid #eee; border-radius: 6px; padding: 16px 20px; margin: 0 0 20px 0;">
-        <legend style="padding: 0 8px; font-weight: bold;">Как с вами связаться</legend>
-        <p style="margin: 0 0 6px 0;">
-            <label><input type="radio" name="contact_method" value="phone"{% if form.contact_method.value != 'email' %} checked{% endif %}> По телефону</label>
-        </p>
-        <p style="margin: 0 0 6px 0;">
-            <label><input type="radio" name="contact_method" value="email"{% if form.contact_method.value == 'email' %} checked{% endif %}> По e-mail</label>
+    <fieldset>
+        <legend>Как с вами связаться</legend>
+        <p class="choices">
+            <label class="choice"><input type="radio" name="contact_method" value="phone"{% if form.contact_method.value != 'email' %} checked{% endif %}> <span>По телефону</span></label>
+            <label class="choice"><input type="radio" name="contact_method" value="email"{% if form.contact_method.value == 'email' %} checked{% endif %}> <span>По e-mail</span></label>
         </p>
 
-        <label for="id_call_time" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Удобное время звонка</label>
-        <input type="time" id="id_call_time" name="call_time" value="{{ form.call_time.value|default:'' }}" min="09:00" max="18:00" style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">
-        {% if form.call_time.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.call_time.errors.0 }}</p>{% endif %}
+        <label for="id_call_time" class="form-label">Удобное время звонка (09:00–18:00)</label>
+        <input type="time" id="id_call_time" name="call_time" value="{{ form.call_time.value|default:'' }}" min="09:00" max="18:00" class="form-control">
+        <p class="range-hint">Мы звоним только с 09:00 до 18:00.</p>
+        {% if form.call_time.errors %}<p role="alert" class="field-error">{{ form.call_time.errors.0 }}</p>{% endif %}
 
-        <label for="id_comment" style="display: block; font-size: 13px; color: #555; margin: 10px 0 4px 0;">Комментарий</label>
+        <label for="id_comment" class="form-label">Комментарий</label>
         <textarea id="id_comment" name="comment" rows="4" maxlength="500" placeholder="Пожелания к отелю, экскурсиям, питанию..."
-            style="width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 4px; font-family: inherit;">{{ form.comment.value|default:'' }}</textarea>
+            class="form-control">{{ form.comment.value|default:'' }}</textarea>
     </fieldset>
 
-    <p style="margin: 0 0 16px 0;">
-        <label style="font-size: 14px;"><input type="checkbox" name="agree" value="on" required{% if form.agree.value %} checked{% endif %}>
-            Согласен с <a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a>
-            <span aria-hidden="true" style="color: #dc3545;">*</span></label>
+    <p>
+        <label class="choice"><input type="checkbox" name="agree" value="on" required{% if form.agree.value %} checked{% endif %}>
+            <span>Согласен с <a href="{% url 'privacy_policy' %}" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a>
+            <span aria-hidden="true" class="req">*</span></span></label>
     </p>
-    {% if form.agree.errors %}<p role="alert" style="color: #dc3545; font-size: 13px; margin: 0 0 8px 0;">{{ form.agree.errors.0 }}</p>{% endif %}
+    {% if form.agree.errors %}<p role="alert" class="field-error">{{ form.agree.errors.0 }}</p>{% endif %}
 
-    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <button type="submit" style="background: #28a745; color: #fff; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 15px;">Отправить заявку</button>
-        <button type="reset" style="background: #eee; color: #111; padding: 10px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 15px;">Очистить</button>
+    <div class="btn-row">
+        <button type="submit" class="btn btn--success">Отправить заявку</button>
+        <button type="reset" class="btn btn--light">Очистить</button>
     </div>
 </form>
 {% endblock %}

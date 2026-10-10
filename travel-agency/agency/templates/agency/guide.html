@@ -3,6 +3,7 @@
 {% block title %}Справка для туриста — Глобус Тревел{% endblock %}
 {% block meta_description %}Справка для туриста: как купить путёвку, термины, полезные ссылки, памятка для скачивания, аудио и видео.{% endblock %}
 {% block meta_keywords %}справка туриста, памятка, как купить путёвку, трансфер, страховка{% endblock %}
+{% block body_class %}page--guide{% endblock %}
 
 {% block content %}
 <header id="top">
@@ -10,11 +11,11 @@
     <p>Страница собрана из <em>семантических</em> элементов HTML5: заголовков, секций, списков, цитат, таблиц, форм и мультимедиа.</p>
 </header>
 
-<noscript><p style="background: #fff3cd; padding: 10px;">В вашем браузере отключён JavaScript — часть возможностей сайта может быть недоступна.</p></noscript>
+<noscript><p class="notice notice--warning">В вашем браузере отключён JavaScript — часть возможностей сайта может быть недоступна.</p></noscript>
 
-<nav aria-label="Оглавление справки" style="margin-bottom: 30px;">
-    <h2 style="font-size: 18px;">Оглавление</h2>
-    <ol>
+<nav aria-label="Оглавление справки" class="guide-toc card card--muted">
+    <h2 class="guide-toc__title">Оглавление</h2>
+    <ol class="guide-toc__list">
         <li><a href="#how-to-buy">Как купить путёвку</a></li>
         <li><a href="#terms">Термины и сокращения</a></li>
         <li><a href="#quotes">Цитаты и отзывы</a></li>
@@ -29,9 +30,9 @@
 
 
 {# ================= 1. Как купить путёвку ================= #}
-<section id="how-to-buy" aria-labelledby="how-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="how-title" style="margin-top: 0;">1. Как купить путёвку</h2>
-    <ol>
+<section id="how-to-buy" aria-labelledby="how-title" class="card guide-section">
+    <h2 id="how-title">1. Как купить путёвку</h2>
+    <ol class="list-steps">
         <li>Выберите направление в <a href="{% url 'tour_list' %}">каталоге</a> или оставьте <a href="{% url 'inquiry' %}">заявку на подбор</a>.</li>
         <li><strong>Зарегистрируйтесь</strong> как клиент — вам должно быть <mark>не менее 18 лет</mark>.</li>
         <li>Нажмите «Добавить в корзину» и проверьте количество путёвок.</li>
@@ -45,7 +46,7 @@
     <p><small>Условия акций могут изменяться. Актуальная информация — на этой странице на <time datetime="{{ today|date:'Y-m-d' }}">{{ today|date:"d/m/Y" }}</time>.</small></p>
 
     <h3>Что входит в стоимость</h3>
-    <ul>
+    <ul class="list-planes">
         <li>проживание в выбранном отеле;</li>
         <li>консультация менеджера;
             <ul>
@@ -57,7 +58,7 @@
     </ul>
 
     <h3>Типы питания</h3>
-    <dl>
+    <dl class="meal-plans">
         <dt>RO</dt><dd>без питания;</dd>
         <dt>BB</dt><dd>только завтраки;</dd>
         <dt>HB</dt><dd>завтраки и ужины (полупансион);</dd>
@@ -66,8 +67,8 @@
 </section>
 
 {# ================= 2. Термины и сокращения ================= #}
-<section id="terms" aria-labelledby="terms-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="terms-title" style="margin-top: 0;">2. Термины и сокращения</h2>
+<section id="terms" aria-labelledby="terms-title" class="card guide-section">
+    <h2 id="terms-title">2. Термины и сокращения</h2>
     <p><dfn>Трансфер</dfn> — организованная доставка туриста из аэропорта в отель и обратно.</p>
     <p><dfn id="term-voucher">Ваучер</dfn> — документ, подтверждающий оплату услуг и дающий право на размещение в отеле.</p>
     <p>Стоимость указана в <abbr title="Белорусские рубли">BYN</abbr>, курсы валют берутся с сайта
@@ -80,46 +81,56 @@
 </section>
 
 {# ================= 3. Цитаты ================= #}
-<section id="quotes" aria-labelledby="quotes-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="quotes-title" style="margin-top: 0;">3. Цитаты и отзывы</h2>
-    <blockquote cite="{% url 'about' %}" style="margin: 0 0 16px 0; padding: 8px 16px; border-left: 4px solid #ccc; background: #fafafa;">
-        <p style="margin: 0;">Мы подберём для вас лучший отдых: полная база отелей, актуальные цены и подробное описание климата для каждого сезона.</p>
+<section id="quotes" aria-labelledby="quotes-title" class="card guide-section">
+    <h2 id="quotes-title">3. Цитаты и отзывы</h2>
+    <blockquote cite="{% url 'about' %}">
+        <p>Мы подберём для вас лучший отдых: полная база отелей, актуальные цены и подробное описание климата для каждого сезона.</p>
         <footer>— <cite>Глобус Тревел</cite>, страница «<a href="{% url 'about' %}">О компании</a>»</footer>
     </blockquote>
     <p>Клиенты говорят: <q cite="{% url 'reviews' %}">Менеджер подобрал отель за один день</q> — подробнее в разделе
         <cite>«<a href="{% url 'reviews' %}">Отзывы</a>»</cite>.</p>
+    <h3>О путешествиях на разных языках</h3>
+    <p class="muted">Кавычки у элемента <code>q</code> подбираются по языку цитаты (атрибут <code>lang</code>).</p>
+    <ul class="quotes">
+        <li><q lang="ru">Лучше один раз увидеть, чем сто раз услышать</q> — <cite>русская пословица</cite></li>
+        <li><q lang="en">The world is a book, and those who do not travel read only one page</q> — <cite>Augustine of Hippo</cite></li>
+        <li><q lang="de">Wenn einer eine Reise tut, so kann er was erzählen</q> — <cite>Matthias Claudius</cite></li>
+        <li><q lang="fr">Les voyages forment la jeunesse</q> — <cite>Michel de Montaigne</cite></li>
+    </ul>
 </section>
 
 {# ================= 4. Листинг ================= #}
-<section id="listing" aria-labelledby="listing-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="listing-title" style="margin-top: 0;">4. Пример листинга: расчёт стоимости</h2>
+<section id="listing" aria-labelledby="listing-title" class="card guide-section">
+    <h2 id="listing-title">4. Пример листинга: расчёт стоимости</h2>
     <p>Так на сайте считается цена путёвки (модель <code>Tour</code>):</p>
-    <figure style="margin: 0;">
-        <pre style="background: #f5f5f5; padding: 14px; overflow-x: auto; border-radius: 4px; margin: 0;"><code>@property
+    <figure class="listing">
+        <pre><code>@property
 def price(self):
     days = self.duration_weeks * 7
     return self.hotel.price_per_day * days</code></pre>
-        <figcaption style="font-size: 13px; color: #666;">Листинг 1. Свойство <code>price</code> на языке Python.</figcaption>
+        <figcaption>Листинг 1. Свойство <code>price</code> на языке Python.</figcaption>
     </figure>
 </section>
 
 {# ================= 5. Стихотворение ================= #}
-<section id="poem" aria-labelledby="poem-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="poem-title" style="margin-top: 0;">5. Стихотворение в дорогу</h2>
+<section id="poem" aria-labelledby="poem-title" class="card guide-section">
+    <h2 id="poem-title">5. Стихотворение в дорогу</h2>
     <p>Четверостишие с фиксированным переводом строки (<code>&lt;br&gt;</code>):</p>
-    <p style="font-style: italic;">
+    <p class="poem">
         Чемодан собран, билеты в руке,<br>
         Море шумит на далёком песке.<br>
         Пусть за окном непогода и снег —<br>
         Скоро в дорогу, в тёплый рассвет.
     </p>
-    <p>А здесь возможный перенос слова (<code>&lt;wbr&gt;</code>) в длинном термине: достопримечатель<wbr>ность,
+    <p class="break-demo">А здесь возможный перенос слова (<code>&lt;wbr&gt;</code>) в длинном термине: достопримечатель<wbr>ность,
         путешествен<wbr>никам, https://www.globus<wbr>travel.by/tours/<wbr>hot/<wbr>summer.</p>
+    <p class="break-demo break-demo--css">А тут перенос и разрыв делает CSS (<code>hyphens</code>, <code>overflow-wrap</code>):
+        высокопревосходительство, достопримечательности, https://www.globustravel.by/tours/hot/summer/all-inclusive/family-rooms.</p>
 </section>
 
 {# ================= 6. Ссылки ================= #}
-<section id="links" aria-labelledby="links-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="links-title" style="margin-top: 0;">6. Ссылки и документы</h2>
+<section id="links" aria-labelledby="links-title" class="card guide-section">
+    <h2 id="links-title">6. Ссылки и документы</h2>
     <ul>
         <li>Внутренняя страница: <a href="{% url 'tour_list' %}" title="Перейти в каталог туров">каталог туров</a>;</li>
         <li>Внешний сайт в новой вкладке: <a href="https://www.belavia.by/" target="_blank" rel="noopener noreferrer" hreflang="ru">Белавиа</a>;</li>
@@ -129,72 +140,72 @@ def price(self):
         <li>Скачать документ: <a href="{% static 'agency/docs/tourist-memo.pdf' %}" download="pamyatka-turista.pdf" type="application/pdf">Памятка туриста (PDF)</a>.</li>
     </ul>
     <p>Полный список цен по отелям — в <a href="{% url 'price_list' %}">прайс-листе</a>; вопросы — в разделе <a href="{% url 'faq' %}">«Словарь / FAQ»</a>.</p>
-    <address style="font-style: normal;">
+    <address class="guide-address">
         Адрес офиса: г. Минск, пр-т Независимости, 1.<br>
         Режим работы: Пн–Пт, <time datetime="09:00">09:00</time>–<time datetime="18:00">18:00</time>.
     </address>
 </section>
 
 {# ================= 7. Адаптивные изображения ================= #}
-<section id="images" aria-labelledby="images-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="images-title" style="margin-top: 0;">7. Адаптивные изображения</h2>
+<section id="images" aria-labelledby="images-title" class="card guide-section">
+    <h2 id="images-title">7. Адаптивные изображения</h2>
     <p>Меняйте ширину окна браузера: для каждой ширины подставляется <strong>своя</strong> картинка
         (у <code>src</code> и <code>srcset</code> файлы намеренно разные).</p>
 
-    <figure style="margin: 0 0 24px 0;">
+    <figure class="guide-figure">
         <img src="{% static 'agency/img/resp-desktop.jpg' %}"
             srcset="{% static 'agency/img/resp-mobile.jpg' %} 480w, {% static 'agency/img/resp-tablet.jpg' %} 800w, {% static 'agency/img/resp-desktop.jpg' %} 1200w"
             sizes="(max-width: 600px) 480px, (max-width: 992px) 800px, 1200px"
             alt="Демонстрация адаптивного изображения: красная картинка для телефона, зелёная для планшета, синяя для компьютера"
-            width="1200" height="600" loading="lazy" style="max-width: 100%; height: auto;">
-        <figcaption style="font-size: 13px; color: #666;">Рис. 1. Элемент <code>img</code> с атрибутами <code>srcset</code> и <code>sizes</code>.</figcaption>
+            width="1200" height="600" loading="lazy">
+        <figcaption>Рис. 1. Элемент <code>img</code> с атрибутами <code>srcset</code> и <code>sizes</code>.</figcaption>
     </figure>
 
-    <figure style="margin: 0;">
+    <figure class="guide-figure">
         <picture>
             <source media="(max-width: 600px)" srcset="{% static 'agency/img/resp-mobile.jpg' %}">
             <source media="(max-width: 992px)" srcset="{% static 'agency/img/resp-tablet.jpg' %}">
-            <img src="{% static 'agency/img/resp-desktop.jpg' %}" alt="Демонстрация элемента picture" width="1200" height="600" loading="lazy" style="max-width: 100%; height: auto;">
+            <img src="{% static 'agency/img/resp-desktop.jpg' %}" alt="Демонстрация элемента picture" width="1200" height="600" loading="lazy">
         </picture>
-        <figcaption style="font-size: 13px; color: #666;">Рис. 2. Элемент <code>picture</code> с несколькими <code>source</code>.</figcaption>
+        <figcaption>Рис. 2. Элемент <code>picture</code> с несколькими <code>source</code>.</figcaption>
     </figure>
 </section>
 
 {# ================= 8. Аудио и видео ================= #}
-<section id="media" aria-labelledby="media-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="media-title" style="margin-top: 0;">8. Аудио и видео</h2>
-    <figure style="margin: 0 0 20px 0;">
-        <video controls preload="metadata" width="480" height="270" style="max-width: 100%; height: auto;">
+<section id="media" aria-labelledby="media-title" class="card guide-section">
+    <h2 id="media-title">8. Аудио и видео</h2>
+    <figure class="media-frame">
+        <video controls preload="metadata" width="480" height="270" class="media-frame__video">
             <source src="{% static 'agency/media/promo-demo.mp4' %}" type="video/mp4">
             Ваш браузер не поддерживает видео. <a href="{% static 'agency/media/promo-demo.mp4' %}" download>Скачать ролик</a>.
         </video>
-        <figcaption style="font-size: 13px; color: #666;">Демонстрационный ролик (элемент <code>video</code>).</figcaption>
+        <figcaption>Демонстрационный ролик (элемент <code>video</code>).</figcaption>
     </figure>
-    <figure style="margin: 0 0 20px 0;">
+    <figure class="audio-player">
         <audio controls preload="none">
             <source src="{% static 'agency/media/welcome.mp3' %}" type="audio/mpeg">
             Ваш браузер не поддерживает аудио. <a href="{% static 'agency/media/welcome.mp3' %}" download>Скачать запись</a>.
         </audio>
-        <figcaption style="font-size: 13px; color: #666;">Приветственный сигнал (элемент <code>audio</code>).</figcaption>
+        <figcaption>Приветственный сигнал (элемент <code>audio</code>).</figcaption>
     </figure>
     <iframe title="Пример встроенного документа (srcdoc)" width="480" height="70" sandbox
         srcdoc="&lt;p style='font-family:sans-serif'&gt;Это содержимое загружено во встроенный фрейм (iframe).&lt;/p&gt;"
-        style="max-width: 100%; border: 1px solid #ccc;"></iframe>
+        class="guide-iframe"></iframe>
 </section>
 
 {# ================= 9. Глобальные атрибуты ================= #}
-<section id="global" aria-labelledby="global-title" style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-    <h2 id="global-title" style="margin-top: 0;">9. Глобальные атрибуты</h2>
+<section id="global" aria-labelledby="global-title" class="card guide-section">
+    <h2 id="global-title">9. Глобальные атрибуты</h2>
     <ul>
         <li><span id="ga-id" title="Подсказка из атрибута title">id и title — наведите курсор</span>;</li>
         <li><span lang="en" translate="no">lang и translate: Have a nice trip!</span>;</li>
-        <li><span contenteditable="true" spellcheck="true" style="border-bottom: 1px dashed #999;">contenteditable — этот текст можно править</span>;</li>
-        <li><span tabindex="0" data-country="turkey" data-stars="5" style="border-bottom: 1px dotted #999;">tabindex и data-* — сфокусируйтесь клавишей Tab</span>;</li>
-        <li><span draggable="true" style="cursor: grab; border-bottom: 1px dotted #999;">draggable — этот текст можно перетаскивать</span>;</li>
+        <li><span contenteditable="true" spellcheck="true" class="ga-demo">contenteditable — этот текст можно править</span>;</li>
+        <li><span tabindex="0" data-country="turkey" data-stars="5" class="ga-demo">tabindex и data-* — сфокусируйтесь клавишей Tab</span>;</li>
+        <li><span draggable="true" class="ga-demo">draggable — этот текст можно перетаскивать</span>;</li>
         <li><span dir="rtl">dir="rtl": справа налево</span>;</li>
         <li><span hidden>hidden — этот текст скрыт</span>атрибут <code>hidden</code> скрывает соседний элемент.</li>
     </ul>
 </section>
 
-<p><a href="#top">↑ Наверх</a></p>
+<p class="to-top"><a href="#top" class="btn btn--light btn--small">↑ Наверх</a></p>
 {% endblock %}

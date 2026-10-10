@@ -1122,12 +1122,6 @@ class Lr1PagesTest(TestCase):
         self.assertContains(r, '<details')
         self.assertContains(r, '<summary')
 
-    def test_no_css_files_or_classes(self):
-        for url in ('/', '/about/', '/news/', '/guide/', '/prices/', '/request/', '/login/', '/register/', '/tours/'):
-            html = self.client.get(url).content.decode()
-            self.assertNotIn('rel="stylesheet"', html, url)
-            self.assertNotIn('<style', html, url)
-            self.assertNotIn(' class=', html, url)
 
     def test_about_parses_company_info(self):
         CompanyInfo.objects.create(
@@ -1248,9 +1242,117 @@ class Lr1ReviewFlowTest(TestCase):
         self.assertEqual(Review.objects.filter(user=u).count(), 1)
 
 
-class Lr1FormStylesTest(TestCase):
-    def test_login_fields_have_inline_style(self):
-        self.assertContains(self.client.get('/login/'), 'style="width: 100%')
+# ==========================================================
+# ЛР2 (CSS): внешние стили, анимация, прелоадер
+# ==========================================================
+from django.contrib.staticfiles import finders
 
-    def test_register_fields_have_inline_style(self):
-        self.assertContains(self.client.get('/register/'), 'box-sizing: border-box')
+LR2_PAGES = ('/', '/about/', '/news/', '/guide/', '/prices/', '/request/', '/login/', '/register/',
+             '/tours/', '/faq/', '/contacts/', '/privacy/', '/vacancies/', '/reviews/', '/promocodes/')
+
+
+def read_static(path):
+    with open(finders.find(path), encoding='utf-8') as f:
+        return f.read()
+
+
+class Lr2StylesheetTest(TestCase):
+    def test_pages_use_own_stylesheets_and_font_service(self):
+        for url in LR2_PAGES:
+            html = self.client.get(url).content.decode()
+            self.assertIn('agency/css/style.css', html, url)
+            self.assertIn('agency/css/pages.css', html, url)
+            self.assertIn('fonts.googleapis.com', html, url)
+            self.assertNotIn('bootstrap', html.lower(), url)
+
+    def test_templates_have_no_inline_styles(self):
+        for url in LR2_PAGES:
+            html = self.client.get(url).content.decode()
+            self.assertNotIn(' style="', html, url)
+            self.assertNotIn('<style', html, url)
+
+    def test_preloader_at_bottom_of_every_page(self):
+        for url in LR2_PAGES:
+            html = self.client.get(url).content.decode()
+            self.assertIn('class="preloader"', html, url)
+            self.assertGreater(html.index('class="preloader"'), html.index('<footer'), url)
+
+    def test_home_has_animation(self):
+        r = self.client.get('/')
+        self.assertContains(r, 'agency/css/animation.css')
+        for stage in ('hero__stage--sky', 'hero__stage--sea', 'hero__stage--road'):
+            self.assertContains(r, stage)
+        self.assertContains(r, 'ГЛОБУС ТРЕВЕЛ')
+        self.assertNotContains(r, '{#')
+
+    def test_navigation_marks_current_page(self):
+        self.assertContains(self.client.get('/news/'), 'aria-current="page">Новости')
+
+    def test_static_assets_exist(self):
+        for path in ('agency/css/style.css', 'agency/css/pages.css', 'agency/css/animation.css',
+                     'agency/img/cert-border.svg', 'agency/img/bg-pattern.svg', 'agency/img/logo-mark.svg',
+                     'agency/img/check.svg'):
+            self.assertIsNotNone(finders.find(path), path)
+
+    def test_css_covers_lab_requirements(self):
+        css = ''.join(read_static(f'agency/css/{name}.css') for name in ('style', 'pages', 'animation'))
+        required = [
+            'a[href^="', 'a[href$="', '[aria-current="page"]',                 # селекторы атрибутов
+            'a:link', 'a:visited', 'a:hover', 'a:active', ':focus',             # ссылки и фокус
+            ':first-child', ':last-child', ':nth-child(',                       # позиция в списке/таблице
+            ':enabled', ':required', ':disabled', ':out-of-range', ':checked',  # элементы формы
+            'q:lang(ru)', 'q:lang(en)',                                         # кавычки по языку
+            '::first-letter', '::first-line', '::before', '::after', '::selection', 'list-style-type: "',
+            '@media (max-width', '@media (max-height', 'cursor: pointer',
+            'text-transform', 'text-indent', 'line-height', 'font-variant', 'word-spacing',
+            'letter-spacing', 'hyphens', 'overflow-wrap', 'text-align',
+            'display: grid', 'border-radius: 50%', 'box-shadow', 'font-kerning',
+            'position: sticky', 'position: absolute', 'z-index',
+            '-webkit-border-image', '-moz-border-image', '-o-border-image', 'border-image:',
+            'linear-gradient', 'transform: rotate',
+            'text-overflow: ellipsis', 'columns:', 'display: flex', 'float: left', 'clear: both',
+            'font: caption', 'font: menu', 'font: message-box',
+            'border-collapse: collapse', 'td:empty', 'caption-side: top', 'vertical-align',
+            '@keyframes',
+        ]
+        for token in required:
+            self.assertIn(token, css, token)
+
+
+class Lr2PagesTest(TestCase):
+    def test_price_list_marks_hotels_without_departures_with_empty_cell(self):
+        country = Country.objects.create(
+            name='Пустляндия', climate_winter='a', climate_spring='b', climate_summer='c', climate_autumn='d')
+        hotel = Hotel.objects.create(country=country, name='Отель-1', stars=3, price_per_day=10)
+        Hotel.objects.create(country=country, name='Отель-2', stars=4, price_per_day=20)
+        date = _dt.date.today() + _dt.timedelta(days=30)
+        Tour.objects.create(hotel=hotel, title='Т', duration_weeks=1, departure_date=date)
+        r = self.client.get('/prices/')
+        self.assertContains(r, date.strftime('%d/%m/%Y'))
+        self.assertContains(r, 'class="price-table__next"></td>')
+
+    def test_reviews_page_has_form_for_client(self):
+        u = User.objects.create_user('lr2cl', password='x')
+        _Client.objects.create(user=u, last_name='Л', first_name='И', address='а',
+                               phone='+375 (29) 111-11-11', birth_date=_dt.date(1990, 1, 1))
+        self.client.force_login(u)
+        r = self.client.get('/reviews/')
+        self.assertContains(r, 'id="review-form"')
+        self.assertContains(r, 'href="#review-form"')
+        self.assertContains(r, 'class="review-form"')
+
+
+class Lr2FormStylesTest(TestCase):
+    def test_login_fields_have_css_class(self):
+        r = self.client.get('/login/')
+        self.assertContains(r, 'class="form-control"')
+        self.assertNotContains(r, 'style="width: 100%')
+
+    def test_register_fields_have_css_class(self):
+        self.assertContains(self.client.get('/register/'), 'class="form-control"')
+
+    def test_checkbox_widget_keeps_default_look(self):
+        from agency.forms import TourForm
+        form = TourForm()
+        self.assertNotIn('class', form.fields['is_hot'].widget.attrs)
+        self.assertEqual(form.fields['title'].widget.attrs['class'], 'form-control')

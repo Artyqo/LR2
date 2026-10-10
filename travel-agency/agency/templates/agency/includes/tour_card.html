@@ -1,0 +1,27 @@
+{# Карточка путёвки для каталога (CSS Grid: внешняя сетка — .catalog, внутренняя — grid-template-areas) #}
+<article itemscope itemtype="https://schema.org/Product" class="tour-card{% if tour.is_hot %} tour-card--hot{% endif %}">
+    <div class="tour-card__media">
+        {% if tour.image %}
+        <img src="{{ tour.image.url }}" alt="{{ tour.title }}" itemprop="image" width="400" height="200" loading="lazy">
+        {% else %}
+        <span class="tour-card__country">{{ tour.hotel.country.name }}</span>
+        {% endif %}
+        {% if tour.is_hot %}<mark class="badge badge--hot tour-card__badge">Горящая</mark>{% endif %}
+    </div>
+    <h3 class="tour-card__title">
+        <a href="{% url 'tour_detail' tour.id %}" itemprop="url"><span itemprop="name">{{ tour.title }}</span></a>
+    </h3>
+    <p class="tour-card__info">
+        <span class="tour-card__hotel">{{ tour.hotel.name }} <span class="stars" title="Класс отеля: {{ tour.hotel.stars }} из 5">{{ tour.hotel.stars }}★</span></span>
+        <span class="tour-card__country-name">{{ tour.hotel.country.name }}</span>
+        <span class="tour-card__dates">{{ tour.get_duration_weeks_display }}, вылет
+            <time datetime="{{ tour.departure_date|date:'Y-m-d' }}">{{ tour.departure_date|date:"d/m/Y" }}</time></span>
+    </p>
+    <div class="tour-card__footer">
+        <p itemprop="offers" itemscope itemtype="https://schema.org/Offer" class="tour-card__price">
+            <span itemprop="price" content="{{ tour.price|stringformat:'.2f' }}">{{ tour.price }}</span>
+            <span itemprop="priceCurrency" content="BYN">BYN</span>
+        </p>
+        <a href="{% url 'tour_detail' tour.id %}" class="btn btn--small" tabindex="-1" aria-hidden="true">Подробнее</a>
+    </div>
+</article>

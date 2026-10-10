@@ -1,0 +1,27 @@
+{# Форма отзыва. Шрифты компонентов заданы системными ключевыми словами (caption, menu, message-box …) в pages.css #}
+<form method="post" action="{% url 'reviews' %}" class="review-form">
+    {% csrf_token %}
+    <input type="hidden" name="author_name" value="{{ request.user.username }}">
+
+    <label for="review-author" class="form-label">Автор отзыва</label>
+    <input type="text" id="review-author" value="{{ request.user.username }}" class="form-control" disabled>
+
+    <label for="review-rating" class="form-label">Оценка <span class="req" aria-hidden="true">*</span></label>
+    <select id="review-rating" name="rating" required class="form-control">
+        <option value="5">5 ★★★★★</option>
+        <option value="4">4 ★★★★</option>
+        <option value="3">3 ★★★</option>
+        <option value="2">2 ★★</option>
+        <option value="1">1 ★</option>
+    </select>
+
+    <label for="review-text" class="form-label">Текст отзыва (не менее 10 символов) <span class="req" aria-hidden="true">*</span></label>
+    <textarea id="review-text" name="text" rows="5" required minlength="10" maxlength="2000"
+        placeholder="Поделитесь впечатлениями о путешествии..." class="form-control"></textarea>
+    <p class="review-form__status">Отзыв будет опубликован от имени: <strong>{{ request.user.username }}</strong></p>
+
+    <div class="btn-row">
+        <button type="submit" class="btn btn--success">Отправить</button>
+        <button type="reset" class="btn btn--light">Очистить</button>
+    </div>
+</form>

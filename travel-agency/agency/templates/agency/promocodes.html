@@ -1,31 +1,46 @@
 {% extends 'agency/base.html' %}
 {% block title %}Промокоды и купоны — Глобус Тревел{% endblock %}
 {% block meta_description %}Действующие промокоды и архив купонов турагентства «Глобус Тревел».{% endblock %}
+{% block body_class %}page--promo{% endblock %}
 {% block content %}
 <h1>Промокоды и купоны</h1>
-<p>Введите промокод на странице оплаты, чтобы получить скидку на заказ.</p>
+<p class="lead">Введите промокод на странице оплаты, чтобы получить скидку на заказ.</p>
+
+<section aria-labelledby="promo-rules-title" class="card card--muted">
+    <h2 id="promo-rules-title">Условия использования</h2>
+    <ul class="list-check">
+        <li>один промокод — на один заказ;</li>
+        <li>скидка считается от суммы корзины;</li>
+        <li>купоны из архива больше не действуют.</li>
+    </ul>
+</section>
 
 <section aria-labelledby="promo-active-title">
     <h2 id="promo-active-title">Действующие промокоды</h2>
-    {% for p in active_promos %}
-    <div style="border: 1px solid #eee; border-left: 4px solid #111; padding: 20px; margin-bottom: 20px; border-radius: 4px;">
-        <h3 style="margin-top: 0;">Код: <code>{{ p.code }}</code></h3>
-        <p style="margin-bottom: 0;">Скидка: <strong>{{ p.discount_amount }}%</strong></p>
-    </div>
-    {% empty %}
-    <p>Нет действующих акций.</p>
-    {% endfor %}
+    <ul class="coupons">
+        {% for p in active_promos %}
+        <li class="coupon">
+            <span class="coupon__discount">−{{ p.discount_amount }}%</span>
+            <span class="coupon__body">
+                <span class="coupon__label">Промокод</span>
+                <code class="coupon__code" title="Введите этот код на странице оплаты">{{ p.code }}</code>
+                <span class="coupon__note">Скидка: <strong>{{ p.discount_amount }}%</strong></span>
+            </span>
+        </li>
+        {% empty %}
+        <li class="empty-state">Нет действующих акций.</li>
+        {% endfor %}
+    </ul>
 </section>
 
-<section aria-labelledby="promo-archive-title" style="margin-top: 40px;">
-    <h2 id="promo-archive-title" style="color: #666;">Архив купонов</h2>
-    {% for p in archive_promos %}
-    <div style="border: 1px solid #eee; padding: 20px; margin-bottom: 20px; border-radius: 4px; opacity: 0.6;">
-        <h3 style="margin-top: 0;">Код: <del>{{ p.code }}</del></h3>
-        <p style="margin-bottom: 0;">Скидка составляла: {{ p.discount_amount }}%</p>
-    </div>
-    {% empty %}
-    <p>Архив пуст.</p>
-    {% endfor %}
+<section aria-labelledby="promo-archive-title">
+    <h2 id="promo-archive-title">Архив купонов</h2>
+    <ol class="archive">
+        {% for p in archive_promos %}
+        <li class="archive__item">Код <del>{{ p.code }}</del> — скидка составляла {{ p.discount_amount }}%</li>
+        {% empty %}
+        <li class="empty-state">Архив пуст.</li>
+        {% endfor %}
+    </ol>
 </section>
 {% endblock %}
